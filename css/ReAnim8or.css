@@ -1,0 +1,265 @@
+html, body {
+	padding: 0;
+	margin: 0;
+	background: #000;
+}
+
+#topbar,
+#leftbar {
+	background: #ddd;
+	position: absolute;
+	border: 1px outset #fff;
+}
+
+#editor {
+	position: fixed;
+	left: 65px; top: 68px;
+	bottom: 0; right: 0;
+}
+
+#menu {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 26px;
+	padding: 3px;
+	background: #333;
+	z-index: 500;
+}
+
+#menu i {
+	font-size: 16px !important;
+}
+
+#menu a {
+	color: #333;
+	padding: 2px 10px;
+	text-decoration: none;
+}
+
+#menu a.disabled {
+	color: #888;
+	cursor: default;
+}
+
+#menu a:hover:not(.disabled) {
+	color: #fff;
+	background: #06a;
+	text-decoration: none;
+}
+
+#menu > .submenu {
+	display: inline-block;
+	color: #aaa;
+	padding: 2px 5px;
+	cursor: pointer;
+}
+
+#menu > .submenu:hover {
+	color: #222;
+	background: #fff;
+}
+
+#menu > .submenu > .more {
+	margin-left: -6px;
+	display: none;
+	position: absolute;
+	background: #fff;
+	padding: 3px 0;
+	min-width: 90px;
+	border: 1px solid #333;
+	border-top: none;
+}
+
+#menu > .submenu > .more > * {
+	display: block;
+}
+
+#menu > .submenu:hover > .more {
+	display: block;
+}
+
+#menu > .pull-right:hover > .more {
+	right: 0;
+	
+}
+
+#menu > .submenu.closed > .more {
+	display: none !important;
+}
+
+#menu .separator {
+	height: 1px;
+	margin: 2px 1px;
+	background: #bbb;
+	border-bottom: 1px solid #fff;
+	display: block;
+}
+
+#topbar {
+	vertical-align: middle;
+	height: 34px;
+	left: 0; right: 0; top: 32px;
+	line-height: 32px;
+}
+
+#leftbar {
+	width: 62px;
+	left: 0;
+	top: 67px;
+	bottom: 0;
+	border-top: none;
+	text-align: center;
+	line-height: 24px;
+}
+
+
+
+#topbar > * {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+#leftbar > * {
+	
+}
+
+#topbar .separator {
+	width: 1px;
+	height: 20px;
+	background-color: #fff;
+	border-left: 1px solid #ccc;
+	padding: 0;
+	margin: 0 2px;
+	margin-top: 4px;
+}
+
+#leftbar .separator {
+	height: 1px;
+	
+	background-color: #fff;
+	border-top: 1px solid #ccc;
+	padding: 0;
+	margin: 2px 3px;
+	display: block;
+}
+
+
+
+.icon-view-rotate,
+.icon-view-full,
+.icon-view-wire,
+.icon-view-flat,
+.icon-arrow,
+.icon-vertex,
+.icon-select-drag {
+	background-position: center center;
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	display: inline-block;
+	margin-top: 3px !important;
+}
+
+.icon-arrow { background-image: url(../icons/arrow.png); }
+.icon-vertex { background-image: url(../icons/vertex.png); }
+
+.icon-view-rotate { background-image: url(../icons/view-rotate.png); }
+.icon-view-wire { background-image: url(../icons/view-wire.png); }
+.icon-view-flat { background-image: url(../icons/view-flat.png); }
+.icon-view-full { background-image: url(../icons/view-full.png); }
+.icon-select-drag { background-image: url(../icons/drag.png); }
+
+#ui {
+	position: fixed;
+	top: 0; bottom: 0;
+	overflow: visible;
+}
+
+.dialog {
+	position: fixed;
+	background: #ccc;
+	z-index: 250;
+	cursor: default;
+	padding: 0;
+	margin: 0;
+}
+
+.dialog:last-child {
+	background: #333;
+}
+
+.dialog > .buttons {
+	position: absolute;
+	right: 3px;
+	top: 1px;
+	z-index: 300;
+	margin: 0;
+	padding: 0;
+	padding-top: 1px;
+}
+
+.dialog > .buttons > * {
+	height: 16px;
+	max-height: 18px;
+	line-height: 16px;
+	vertical-align: middle;
+}
+
+.dialog > .title {
+	position: absolute;
+	height: 20px;
+	top: 1px; left: 1px; right: 1px;
+	padding: 2px 4px;
+	cursor: move;
+	z-index: 275;
+	margin: 0;
+	font-weight: bold;
+	color: #333;
+	text-shadow: 0 1px #fff;
+}
+
+.dialog:last-child > .title {
+	color: #eee;
+	text-shadow: none;
+}
+
+.dialog > .content {
+	position: absolute;
+	background: #fff;
+	padding: 2px 5px;
+	top: 24px;
+	bottom: 2px;
+	right: 2px;
+	left: 2px;
+}
+
+.dialog > .content > .foot {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	padding: 3px;
+}
+
+.dialog.dragging {
+	border-color: #fff;
+	outline-color: #000;
+}
+
+.dialog.dragging {
+	opacity: 0.6667;
+}
+
+input,
+a,
+button {
+	outline: none !important;
+}
+
+.tooltip {
+
+}
+
+

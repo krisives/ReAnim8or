@@ -1,0 +1,283 @@
+<!doctype html>
+<html>
+<head>
+	<title>ReAnim8or</title>
+	<link rel="shortcut icon" href="ReAnim8or.ico">
+	<link rel="icon" href="ReAnim8or.ico">
+	
+	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="css/ReAnim8or.css">
+	
+	<script src="three.min.js"></script>
+	<script src="require.js"></script>
+	<script src="jquery.js"></script>
+	<script src="jquery.filedrop.js"></script>
+	<script src="bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div id="menu">
+	<div class="submenu">
+		<span>File</span>
+		
+		<div class="more">
+			<a data-open="#open"><i class="icon-file"></i> Open</a>
+			<a><i class="icon-save"></i> Save</a>
+			<a><i class="icon-save"></i> Save As...</a>
+			<div class="separator"></div>
+			<a id="menu-quit"><i class="icon-off"></i> Quit</a>
+		</div>
+	</div>
+	
+	<div class="submenu">
+		<span>Edit</span>
+		
+		<div class="more">
+			<a><i class="icon-copy"></i> Copy</a>
+			<a><i class="icon-paste"></i> Paste</a>
+			<div class="separator"></div>
+			<a><i class="icon-cut"></i> Cut</a>
+		</div>
+	</div>
+	
+	<div class="submenu">
+		<span>Mode</span>
+		
+		<div class="more">
+			<a><i class="icon-check"></i> Object</a>
+			<a class="disabled"><i class="icon-check-empty"></i> Figure</a>
+			<a class="disabled"><i class="icon-check-empty"></i> Sequence</a>
+		</div>
+	</div>
+	
+	<div class="submenu">
+		<span>Object</span>
+		
+		<div class="more">
+			<a><i class="icon-star"></i> New</a>
+			<div class="separator"></div>
+			<a><i class="icon-upload"></i> Import</a>
+			<a><i class="icon-download"></i> Export</a>
+			<div class="separator"></div>
+			<a><i class="icon-check"></i> Some Object</a>
+		</div>
+	</div>
+	
+	<div class="submenu">
+		<span>View</span>
+		
+		<div class="more">
+			<a><i class="icon-refresh"></i> Reset</a>
+			<div class="separator"></div>
+			
+			<a><i class="icon-check"></i> Wire</a>
+			<a><i class="icon-check-empty"></i> Flat</a>
+			<a><i class="icon-check-empty"></i> Smooth</a>
+			<div class="separator"></div>
+			<a><i class="icon-check"></i> Grid</a>
+		</div>
+	</div>
+	
+	<div class="submenu">
+		<span>Build</span>
+		
+		<div class="more">
+			<a><i class="icon-link"></i> Group</a>
+			<a><i class="icon-resize-full"></i> Ungroup</a>
+			<div class="separator"></div>
+			<a><i class=""></i> Convert to Mesh</a>
+			<a><i class=""></i> Join Solids</a>
+		</div>
+	</div>
+	
+	<div class="submenu pull-right">
+		<span>About</span>
+		
+		<div class="more">
+			<a href="https://github.com/krisives/ReAnim8or" target="_blank">
+				<i class="icon-globe"></i>
+				GitHub
+			</a>
+			
+			<a href="https://github.com/krisives/ReAnim8or/wiki" target="_blank">
+				<i class="icon-book"></i>
+				Wiki
+			</a>
+			
+			<a href="https://github.com/krisives/ReAnim8or/issues/new" target="_blank">
+				<i class="icon-flag"></i>
+				Report Bug
+			</a>
+			
+			<div class="separator"></div>
+			<a data-open="#about"><i class="icon-question-sign"></i> About</a>
+		</div>
+	</div>
+</div>
+<div id="topbar">
+	<a class="btn tool-undo tip" title="Undo" data-placement="bottom">
+		<i class="icon-undo"></i>
+	</a>
+	
+	<a class="btn tip" title="Redo" data-placement="bottom">
+		<i class="icon-repeat"></i>
+	</a>
+	
+	<div class="separator"></div>
+	<div class="btn-group" data-toggle="buttons-radio">
+		<a type="button" class="btn tip" data-placement="bottom" title="Wireframe">
+			<i class="icon-view-wire"></i>
+		</a>
+		
+		<a type="button" class="btn tip" data-placement="bottom" title="Flat Shading">
+			<i class="icon-view-flat"></i>
+		</a>
+		
+		<a type="button" class="btn active tip" data-placement="bottom" title="Smooth Shading">
+			<i class="icon-view-full"></i>
+		</a>
+	</div>
+	<div class="separator"></div>
+	<div class="btn-group" data-toggle="buttons-checkbox">
+		<a class="btn tool-view tip" data-placement="bottom" title="Rotate/Pan View">
+			<i class="icon-view-rotate"></i>
+		</a>
+	</div>
+</div>
+<div id="leftbar">
+	<div class="separator"></div>
+	<div class="btn-group" data-toggle="buttons-radio">
+		<a class="btn btn-mini active"><i class="icon-arrow"></i></a>
+		<a class="btn btn-mini"><i class="icon-vertex"></i></a>
+	</div>
+	<div class="separator"></div>
+	<div class="btn-group" data-toggle="buttons-checkbox">
+		<a class="btn btn-mini active">x</a>
+		<a class="btn btn-mini active">y</a>
+		<a class="btn btn-mini active">z</a>
+	</div>
+
+	<div class="separator"></div>
+	<div class="btn-group" data-toggle="buttons-radio">
+		<a class="btn btn-mini active"><i class="icon-arrow"></i></a>
+		<a class="btn btn-mini"><i class="icon-select-drag"></i></a>
+	</div>
+</div>
+<div id="editor"></div>
+<div id="ui">
+
+<div
+	class="dialog"
+	id="about"
+	style="display: none; width: 400px; height: 300px;"
+	data-center="center"
+>
+	<div class="title">About ReAnim8or</div>
+	<div class="content">
+		<center>
+		<h1>ReAnim8or</h1>
+		<p>
+			<div>
+				<strong>Website:</strong>
+				<a href="https://github.com/krisives/ReAnim8or" target="_blank">
+					github.com/krisives/ReAnim8or
+				</a>
+				
+				<strong>Version:</strong>
+				<code>0.1</code>
+			</div>
+			
+			Sadly, he never open sourced
+			the original.
+		</p>
+		</center>
+		
+		<div>
+			Made with:
+			<ul>
+				<li><a target="_blank" href="http://threejs.org">ThreeJS</a></li>
+				<li><a target="_blank" href="https://twitter.github.com/bootstrap">Bootstrap</a></li>
+				<li><a target="_blank" href="http://jquery.com">jQuery</a></li>
+				<li><a target="_blank" href="http://requirejs.com">RequireJS</a></li>
+				<li><a target="_blank" href="http://fortawesome.github.com/Font-Awesome/">Font Awesome</a></li>
+			</ul>
+		</div>
+		
+		
+		<div class="foot">
+			<a data-close="#about" class="btn btn-primary pull-right">
+				Thanks
+			</a>
+		</div>
+	</div>
+</div>
+
+<div
+	class="dialog"
+	id="open"
+	style="display: none; width: 400px; height: 200px;"
+	data-center="center"
+>
+	<div class="title">Open</div>
+	<div class="content">
+		<input type="file">
+		
+		<div class="foot">
+			<a class="btn btn-primary disabled pull-right" data-close="#open">
+				Open
+			</a>
+		</div>
+	</div>
+</div>
+
+</div>
+</div>
+
+<script>
+requirejs.config({
+	baseUrl: 'js',
+});
+
+requirejs(['Dialog', 'Editor'], function (Dialog, Editor) {
+	$(function () {
+		$('.tip').tooltip();
+		
+		$(window)
+			.attr('unselectable', 'on')
+			.css('user-select', 'none')
+			.on('selectstart', false)
+			.on('contextmenu', false);
+		
+		$(window).mousedown(function (e) {
+			e.preventDefault();
+			return false;
+		});
+		
+		$('.dialog').each(function (index, node) {
+			var dialog = Dialog.get(node);
+			
+			if (dialog.node.is(':visible')) {
+				
+			}
+		});
+		
+		try {
+			var editor = new Editor('#editor');
+			editor.start();
+		} catch (e) {
+			if (window.console) {
+				console.log(e);
+			
+				if (window.console.trace) {
+					console.trace(e);
+				}
+			}
+		
+			alert("Unable to start: " + e);
+		}
+	});
+});
+</script>
+
+</body>
+</html>
