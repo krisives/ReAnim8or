@@ -8,7 +8,7 @@ define(['Dialog'], function (Dialog) {
 		this.editor = editor;
 		this.node = node;
 		
-		$(this.node).find('a').each(function (index, a) {
+		node.find('a').each(function (index, a) {
 			a = $(a);
 			
 			a.click(function (e) {
@@ -25,10 +25,8 @@ define(['Dialog'], function (Dialog) {
 		});
 		
 		this.bind('quit', function () {
-			if (menu.editor && menu.editor.quit) {
-				if (!menu.editor.quit()) {
-					return;
-				}
+			if (!menu.editor.quit()) {
+				return;
 			}
 			
 			window.close();
@@ -49,7 +47,7 @@ define(['Dialog'], function (Dialog) {
 	
 	Menu.prototype = {
 		bind: function (x, f) {
-			$(['#menu', x]).click(f);
+			$(['#menu', x].join('-')).click(f);
 		},
 		
 		update: function () {
