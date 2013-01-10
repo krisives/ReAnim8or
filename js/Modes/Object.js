@@ -1,15 +1,22 @@
 'use strict';
 
-define(['Camera', 'Grid'], function (Camera, Grid) {
+define(['Mode', 'Grid'], function (Mode, Grid) {
 	function ObjectMode(editor) {
-		this.editor = editor;
-		this.scene = new THREE.Scene();
-		this.camera = new Camera(this);
+		Mode.call(this, arguments);
+		
+		this.id = 'object';
+		//this.editor = editor;
+		//this.scene = new THREE.Scene();
+		//this.camera = new Camera(this);
 		this.grid = new Grid(this);
 		//this.controls = new THREE.OrbitControls(this.camera.entity);
 	}
 	
-	ObjectMode.prototype = {
+	ObjectMode.prototype = Mode.extend({
+		resize: function () {
+			this.camera.resize();
+		},
+		
 		update: function () {
 			//if (this.controls && this.controls.update) {
 			//	this.controls.update();
@@ -23,7 +30,7 @@ define(['Camera', 'Grid'], function (Camera, Grid) {
 				this.grid.update();
 			}
 		}
-	};
+	});
 	
 	return ObjectMode;
 });

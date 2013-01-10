@@ -14,6 +14,8 @@
 	<script src="jquery.js"></script>
 	<script src="jquery.filedrop.js"></script>
 	<script src="bootstrap/js/bootstrap.min.js"></script>
+	
+	<script src="ReAnim8or.js"></script>
 </head>
 <body>
 <div id="menu">
@@ -44,9 +46,20 @@
 		<span>Mode</span>
 		
 		<div class="more">
-			<a><i class="icon-check"></i> Object</a>
-			<a class="disabled"><i class="icon-check-empty"></i> Figure</a>
-			<a class="disabled"><i class="icon-check-empty"></i> Sequence</a>
+			<a id="menu-mode-object">
+				<i class="icon-check"></i>
+				Object
+			</a>
+			
+			<a id="menu-mode-figure" class="disabled">
+				<i class="icon-check-empty"></i>
+				Figure
+			</a>
+			
+			<a id="menu-mode-sequence" class="disabled">
+				<i class="icon-check-empty"></i>
+				Sequence
+			</a>
 		</div>
 	</div>
 	
@@ -67,7 +80,7 @@
 		<span>View</span>
 		
 		<div class="more">
-			<a><i class="icon-refresh"></i> Reset</a>
+			<a id="menu-view-reset"><i class="icon-refresh"></i> Reset</a>
 			<div class="separator"></div>
 			
 			<a><i class="icon-check"></i> Wire</a>
@@ -162,6 +175,18 @@
 		<a class="btn btn-mini active"><i class="icon-arrow"></i></a>
 		<a class="btn btn-mini"><i class="icon-select-drag"></i></a>
 	</div>
+	
+	<div class="separator"></div>
+	<div class="btn-group" data-toggle="buttons-radio">
+		<a class="btn btn-mini active tip" title="Create a Cube" data-placement="right">
+			<i class="icon-make-cube"></i>
+		</a>
+		<a class="btn btn-mini tip" title="Create a Sphere" data-placement="right">
+			<i class="icon-make-sphere"></i>
+		</a>
+	</div>
+	
+	
 </div>
 <div id="editor"></div>
 <div id="ui">
@@ -223,7 +248,7 @@
 		<input type="file">
 		
 		<div class="foot">
-			<a class="btn btn-primary disabled pull-right" data-close="#open">
+			<a class="btn btn-primary pull-right" data-close="#open">
 				Open
 			</a>
 		</div>
@@ -232,52 +257,5 @@
 
 </div>
 </div>
-
-<script>
-requirejs.config({
-	baseUrl: 'js',
-});
-
-requirejs(['Dialog', 'Editor'], function (Dialog, Editor) {
-	$(function () {
-		$('.tip').tooltip();
-		
-		$(window)
-			.attr('unselectable', 'on')
-			.css('user-select', 'none')
-			.on('selectstart', false)
-			.on('contextmenu', false);
-		
-		$(window).mousedown(function (e) {
-			e.preventDefault();
-			return false;
-		});
-		
-		$('.dialog').each(function (index, node) {
-			var dialog = Dialog.get(node);
-			
-			if (dialog.node.is(':visible')) {
-				
-			}
-		});
-		
-		try {
-			var editor = new Editor('#editor');
-			editor.start();
-		} catch (e) {
-			if (window.console) {
-				console.log(e);
-			
-				if (window.console.trace) {
-					console.trace(e);
-				}
-			}
-		
-			alert("Unable to start: " + e);
-		}
-	});
-});
-</script>
-
 </body>
 </html>

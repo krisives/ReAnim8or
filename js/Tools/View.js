@@ -1,41 +1,65 @@
 'use strict';
 
-define(['Mouse'], function (Mouse) {
-	function ViewTool(toolbar) {
+define(['Tool', 'Mouse'], function (Tool, Mouse) {
+	var Vector3 = THREE.Vector3;
+	var Vector2 = THREE.Vector2;
+	var Quaternion = THREE.Quaternion;
+	
+	function ViewTool(editor) {
 		var tool = this;
 		
-		if (!toolbar) { throw "Must pass a Toolbar"; }
+		Tool.construct(this, editor, 'view');
 		
-		this.id = 'view';
-		this.editor = toolbar.editor;
-		this.toolbar = toolbar;
-		this.button = this.toolbar.node.find('.tool-view');
+		this.button = editor.toolbar.node.find('.tool-view');
 		this.isGlobal = true;
 		this.panning = false;
+		this.rotating = false;
+		this.mouseRotate = new Vector3();
+		this.q = new Quaternion();
 		
 		this.button.click(function () {
-			toolbar.changeTool(tool);
+			editor.toolbar.changeTool(tool);
 		});
 		
 		Mouse.on.down(function (e) {
-			//if (tool.isActive()) {
-				if (e.button === 2) {
-					tool.panning = true;
-				}
-			//}
+			switch (e.button) {
+			case 0:
+				tool.rotating = true;
+				break;
+			case 1:
+				tool.zoomStart();
+				break;
+			case 2:
+				tool.panning = true;
+				break;
+			}
 		});
 		
 		Mouse.on.up(function (e) {
-			//if (tool.isActive()) {
-				if (e.button === 2) {
-					tool.panning = false;
-				}
-			//}
+			switch (e.button) {
+			case 0:
+				tool.rotating = false;
+				break;
+			case 1:
+				tool.zoomEnd();
+				break;
+			case 2:
+				tool.panning = false;
+				break;
+			}
 		});
 		
 		Mouse.on.move(function (e) {
 			if (tool.panning) {
 				tool.pan();
+			}
+			
+			if (tool.rotating) {
+				tool.rotate();
+			}
+			
+			if (tool.zooming) {
+				tool.zoom();
 			}
 		});
 	}
@@ -43,26 +67,32 @@ define(['Mouse'], function (Mouse) {
 	var projector = new THREE.Projector();
 	
 	ViewTool.prototype = {
-		isActive: function () {
-			return this.toolbar.active === this;
+		pan: function () {
+			this.editor.mode.camera.move(
+				0
+				-Mouse.delta.x * 0.25,
+				Mouse.delta.y * 0.25
+			);
 		},
 		
-		pan: function () {
-			var mode = this.editor.mode;
-			var camera = mode.camera;
-			var rig = camera.rig;
-			var q = camera.entity.quaternion;
-			
-			var d = new THREE.Vector3(
-				-Mouse.delta.x * 0.5,
-				Mouse.delta.y * 0.5,
+		rotate: function () {
+			this.editor.mode.camera.turn(
+				Mouse.delta.x,
+				Mouse.delta.y,
 				0
 			);
-			
-			q.multiplyVector3(d);
-			
-			rig.translate(0.1, d);
-			//this.editor.mode.camera.rig.updateMatrix();
+		},
+		
+		zoom: function () {
+			this.editor.mode.camera.zoom(Mouse.delta.x * 0.1);
+		},
+		
+		zoomStart: function () {
+			this.zooming = true;
+		},
+		
+		zoomEnd: function () {
+			this.zooming = false;
 		}
 	};
 	

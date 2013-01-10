@@ -1,7 +1,10 @@
 'use strict';
 
-define(['Mouse', 'Menu', 'Toolbar', 'ObjectMode'],
-function (Mouse, Menu, Toolbar, ObjectMode) {
+define(['Mouse', 'Menu', 'Toolbar'],
+function (Mouse, Menu, Toolbar) {
+	var defaultFormats = ['Formats/An8'];
+	var defaultModes = ['Modes/Object'];
+	
 	function Editor(node) {
 		var editor = this;
 		node = $(node);
@@ -9,37 +12,63 @@ function (Mouse, Menu, Toolbar, ObjectMode) {
 		this.node = node;
 		this.renderer = new THREE.WebGLRenderer();
 		this.menu = new Menu(this, '#menu');
-		this.tools = new Toolbar(this);
+		this.toolbar = new Toolbar(this);
+		
 		this.running = false;
 		this.plugins = {};
 		this.formats = {};
-		
-		this.modes = {
-			object: new ObjectMode(this)
-			//figure: new FigureMode(this),
-			//sequence: new SequenceMode(this)
-		};
+		this.modes = {};
+		this.mode = null;
 		
 		this.node.append(this.renderer.domElement);
 		this.renderer.setClearColorHex(0x666699, 1);
-		
-		this.changeMode(this.modes.object);
 		
 		$(window).resize(function () {
 			editor.resize();
 		});
 		
 		this.resize();
+		
+		requirejs(defaultFormats, function () {
+			var loaded = arguments;
+			var len = loaded.length;
+			
+			for (var i=0; i < len; i++) {
+				try {
+					editor.addFormat(loaded[i]);
+				} catch (e) {
+					editor.error(e);
+				}
+			}
+		});
+		
+		requirejs(defaultModes, function () {
+			$.each(arguments, function (index, mode) {
+				try {
+					editor.addMode(new mode(editor));
+				} catch (e) {
+					editor.error(e);
+				}
+			});
+		});
 	}
 	
 	Editor.prototype = {
-		error: function () {
+		error: function (e) {
 			if (!window.console) {
 				alert(arguments.join(' '));
 				return;
 			}
 			
-			console.log(arguments);
+			if (console.error) {
+				console.error(arguments);
+			} else {
+				console.log("Error", arguments);
+			}
+			
+			if (console.trace) {
+				console.trace(e);
+			}
 		},
 		
 		addPlugin: function (plugin) {
@@ -117,7 +146,10 @@ function (Mouse, Menu, Toolbar, ObjectMode) {
 		
 		render: function () {
 			this.update();
-			this.renderer.render(this.mode.scene, this.mode.camera.entity);
+			
+			if (this.mode && this.mode.camera) {
+				this.renderer.render(this.mode.scene, this.mode.camera.entity);
+			}
 		},
 		
 		stop: function () {
@@ -146,11 +178,34 @@ function (Mouse, Menu, Toolbar, ObjectMode) {
 		},
 		
 		addFormat: function (format) {
-		
+			this.formats[format.id] = format;
 		},
 		
 		findFormat: function (name, data) {
+			var i, list = this.formats, len = list.len;
+			var format;
 			
+			for (i=0; i < len; i++) {
+				format = list[i];
+				
+				if (format.canRead(name, data)) {
+					return format;
+				}
+			}
+			
+			return false;
+		},
+		
+		addMode: function (mode) {
+			if (!mode || !mode.id) {
+				throw "Invalid mode passed";
+			}
+			
+			this.modes[mode.id] = mode;
+			
+			if (!this.mode) {
+				this.changeMode(mode);
+			}
 		},
 		
 		changeMode: function (mode) {
@@ -163,6 +218,9 @@ function (Mouse, Menu, Toolbar, ObjectMode) {
 			}
 			
 			this.mode = mode;
+			
+			this.resize();
+			this.update();
 			
 			if (this.mode && this.mode.activate) {
 				this.mode.activate();

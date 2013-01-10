@@ -5,6 +5,8 @@ define(function () {
 		
 		this.last = {x: 0, y: 0};
 		this.delta = {x: 0, y: 0};
+		
+		// Map of buttons that are current pressed
 		this.down = {};
 	}
 	

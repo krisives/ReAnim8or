@@ -14,15 +14,17 @@ define(function () {
 		this.tools = {};
 		this.active = null;
 		
+		editor.toolbar = this;
+		
 		requirejs(defaultTools, function () {
 			var loaded = arguments;
 			var i, len = loaded.length;
-			var plugin;
+			var tool;
 			
 			for (i=0; i < len; i++) {
 				try {
-					plugin = loaded[i];
-					toolbar.addTool(new plugin(toolbar));
+					tool = loaded[i];
+					toolbar.addTool(new tool(editor));
 				} catch (e) {
 					editor.error(e);
 				}

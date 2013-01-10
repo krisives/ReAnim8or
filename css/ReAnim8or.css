@@ -47,6 +47,8 @@ html, body {
 	color: #fff;
 	background: #06a;
 	text-decoration: none;
+	text-shadow: none;
+	background: -webkit-linear-gradient(#059, #07b);
 }
 
 #menu > .submenu {
@@ -70,6 +72,8 @@ html, body {
 	min-width: 90px;
 	border: 1px solid #333;
 	border-top: none;
+	background: -webkit-linear-gradient(#fff 10%, #ccc);
+	text-shadow: 0 1px #fff;
 }
 
 #menu > .submenu > .more > * {
@@ -153,7 +157,9 @@ html, body {
 .icon-view-flat,
 .icon-arrow,
 .icon-vertex,
-.icon-select-drag {
+.icon-select-drag,
+.icon-make-cube,
+.icon-make-sphere {
 	background-position: center center;
 	background-repeat: no-repeat;
 	width: 16px;
@@ -164,12 +170,13 @@ html, body {
 
 .icon-arrow { background-image: url(../icons/arrow.png); }
 .icon-vertex { background-image: url(../icons/vertex.png); }
-
 .icon-view-rotate { background-image: url(../icons/view-rotate.png); }
 .icon-view-wire { background-image: url(../icons/view-wire.png); }
 .icon-view-flat { background-image: url(../icons/view-flat.png); }
 .icon-view-full { background-image: url(../icons/view-full.png); }
 .icon-select-drag { background-image: url(../icons/drag.png); }
+.icon-make-cube { background-image: url(../icons/object-make-cube.png); }
+.icon-make-sphere { background-image: url(../icons/object-make-sphere.png); }
 
 #ui {
 	position: fixed;
@@ -258,8 +265,8 @@ button {
 	outline: none !important;
 }
 
-.tooltip {
-
+/** Random fix to keep a bootstrap button from jiggling */
+.btn-group > .btn {
+	margin-left: -1px;
 }
-
 

@@ -11,18 +11,20 @@ define(['Dialog'], function (Dialog) {
 		$(this.node).find('a').each(function (index, a) {
 			a = $(a);
 			
-			if (a.data('open')) {
-				a.click(function (e) {
-					Dialog.get(a.data('open')).show();
-				});
-			}
-			
 			a.click(function (e) {
+				if (a.hasClass('disabled')) {
+					return;
+				}
+				
+				if (a.data('open')) {
+					Dialog.get(a.data('open')).show();
+				}
+				
 				menu.close();
 			});
 		});
 		
-		$('#menu-quit').click(function (e) {
+		this.bind('quit', function () {
 			if (menu.editor && menu.editor.quit) {
 				if (!menu.editor.quit()) {
 					return;
@@ -32,12 +34,24 @@ define(['Dialog'], function (Dialog) {
 			window.close();
 		});
 		
-		$('#menu-open').click(function (e) {
+		this.bind('open', function () {
 			menu.editor.open();
 		});
+		
+		this.bind('view-reset', function () {
+			menu.editor.mode.camera.reset();
+		});
+		
+		this.bind('mode-object', function () { this.editor.changeMode('object'); });
+		this.bind('mode-figure', function () { this.editor.changeMode('figure'); });
+		this.bind('mode-sequence', function () { this.editor.changeMode('sequence'); });
 	}
 	
 	Menu.prototype = {
+		bind: function (x, f) {
+			$(['#menu', x]).click(f);
+		},
+		
 		update: function () {
 			
 		},

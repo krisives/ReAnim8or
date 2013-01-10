@@ -1,8 +1,4 @@
-define(function () {
-	var ReAnim8or = exports.ReAnim8or;
-	
-	if (!ReAnim8or) { throw "Missing ReAnim8or"; }
-	
+define(['Format'], function (Format) {
 	var patterns = {
 		digit: /[0-9]/,
 		letter: /a-z/i,
@@ -188,11 +184,13 @@ define(function () {
 	};
 	
 	function Loader(data) {
+		Format.call(this);
+		
 		var context = new Context(data);
 		var root = context.block();
 		
 		console.log(root);
 	}
 	
-	ReAnim8or.An8 = Loader;
+	return Loader;
 });

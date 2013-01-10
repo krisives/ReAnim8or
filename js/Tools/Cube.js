@@ -1,0 +1,3 @@
+define(['Tool'], function (Tool) {
+	
+});
