@@ -68,10 +68,14 @@ define(['Tool', 'Mouse'], function (Tool, Mouse) {
 	
 	ViewTool.prototype = {
 		pan: function () {
-			this.editor.mode.camera.move(
+			var camera = this.editor.mode.camera;
+			var x = Mouse.delta.x / this.editor.width;
+			var y = Mouse.delta.y / this.editor.height;
+			
+			camera.move(
 				0
-				-Mouse.delta.x * 0.25,
-				Mouse.delta.y * 0.25
+				-x * camera.distance,
+				y * camera.distance
 			);
 		},
 		
