@@ -2,7 +2,7 @@ requirejs.config({
 	baseUrl: 'js',
 });
 
-requirejs(['Dialog', 'Editor'], function (Dialog, Editor) {
+requirejs(['Dialog', 'Editor', 'Mouse'], function (Dialog, Editor, Mouse) {
 	$(function () {
 		$('.tip').tooltip({container: '#ui'});
 		
@@ -50,5 +50,42 @@ requirejs(['Dialog', 'Editor'], function (Dialog, Editor) {
 		
 			alert("Unable to start: " + e);
 		}
+		
+		function cancel(e) {
+			var target = $(e.srcElement);
+			
+			$('.popmenu').each(function (index, popmenu) {
+				popmenu = $(popmenu);
+				
+				if (target.is('.popmenu')) {
+					return;
+				}
+				
+				if (target.parents('.popmenu').length > 0) {
+					return;
+				}
+				
+				if (target.data('menu')) {
+					return;
+				}
+				
+				popmenu.removeClass('open');
+			});
+		}
+		
+		Mouse.on.down(cancel);
+		Mouse.on.up(cancel);
+		
+		$('[data-menu]').mousedown(function (e) {
+			$($(this).data('menu')).addClass('open');
+		});
+		
+		$('.popmenu').each(function (index, popmenu) {
+			popmenu = $(popmenu);
+			
+			popmenu.children('a').click(function () {
+				popmenu.removeClass('open');
+			});
+		});
 	});
 });
