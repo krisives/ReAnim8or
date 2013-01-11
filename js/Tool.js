@@ -1,15 +1,13 @@
 'use strict';
 
 define(function () {
-	function Tool(editor, id) {
-		console.log(editor, id);
-		
+	function Tool(id, editor, toolbar) {
 		if (!editor) {
 			throw "Must pass an Editor";
 		}
 		
-		if (!editor.toolbar) {
-			throw "Toolbar must be bound to an editor";
+		if (!toolbar) {
+			throw "Must pass a Toolbar";
 		}
 		
 		if (id === null || id.length <= 0) {
@@ -18,7 +16,7 @@ define(function () {
 		
 		this.id = id;
 		this.editor = editor;
-		this.toolbar = editor.toolbar;
+		this.toolbar = toolbar;
 	}
 	
 	function optional() {
@@ -26,12 +24,12 @@ define(function () {
 	}
 	
 	Tool.prototype = {
+		activate: optional,
+		deactivate: optional,
+		
 		isActive: function () {
 			return this.toolbar.active === this;
 		},
-		
-		activate: optional,
-		deactivate: optional,
 		
 		createHandler: function (f) {
 			var tool = this;
@@ -50,8 +48,8 @@ define(function () {
 		return $({}, Tool.prototype, o);
 	};
 	
-	Tool.construct = function (it, editor, id) {
-		Tool.call(it, editor, id);
+	Tool.construct = function (it, id, editor, toolbar) {
+		Tool.call(it, id, editor, toolbar);
 		return it;
 	};
 	

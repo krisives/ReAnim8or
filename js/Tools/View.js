@@ -5,10 +5,10 @@ define(['Tool', 'Mouse'], function (Tool, Mouse) {
 	var Vector2 = THREE.Vector2;
 	var Quaternion = THREE.Quaternion;
 	
-	function ViewTool(editor) {
+	function ViewTool(editor, toolbar) {
 		var tool = this;
 		
-		Tool.construct(this, editor, 'view');
+		Tool.construct(this, 'view', editor, toolbar);
 		
 		this.button = editor.toolbar.node.find('.tool-view');
 		this.isGlobal = true;

@@ -24,7 +24,7 @@ define(function () {
 			for (i=0; i < len; i++) {
 				try {
 					tool = loaded[i];
-					toolbar.addTool(new tool(editor));
+					toolbar.addTool(new tool(editor, toolbar));
 				} catch (e) {
 					editor.error(e);
 				}
