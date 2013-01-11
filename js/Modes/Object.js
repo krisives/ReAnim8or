@@ -1,15 +1,32 @@
 'use strict';
 
 define(['Mode', 'Grid'], function (Mode, Grid) {
+	var defaultTools = [
+		'Tools/View'
+	];
+	
 	function ObjectMode(editor) {
 		Mode.call(this, arguments);
 		
 		this.id = 'object';
-		//this.editor = editor;
-		//this.scene = new THREE.Scene();
-		//this.camera = new Camera(this);
 		this.grid = new Grid(this);
-		//this.controls = new THREE.OrbitControls(this.camera.entity);
+		
+		requirejs(defaultTools, function () {
+			var loaded = arguments;
+			var i, len = loaded.length;
+			var tool;
+			
+			for (i=0; i < len; i++) {
+				try {
+					tool = loaded[i];
+					editor.toolbar.addTool(new tool(editor, editor.toolbar));
+				} catch (e) {
+					editor.error(e);
+				}
+			}
+			
+			editor.update();
+		});
 	}
 	
 	ObjectMode.prototype = Mode.extend({

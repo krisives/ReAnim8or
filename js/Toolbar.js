@@ -1,10 +1,6 @@
 'use strict';
 
 define(function () {
-	var defaultTools = [
-		'Tools/View'
-	];
-	
 	function Toolbar(editor) {
 		var toolbar = this;
 		if (!editor) { throw "Must pass an editor"; }
@@ -15,23 +11,6 @@ define(function () {
 		this.active = null;
 		
 		editor.toolbar = this;
-		
-		requirejs(defaultTools, function () {
-			var loaded = arguments;
-			var i, len = loaded.length;
-			var tool;
-			
-			for (i=0; i < len; i++) {
-				try {
-					tool = loaded[i];
-					toolbar.addTool(new tool(editor, toolbar));
-				} catch (e) {
-					editor.error(e);
-				}
-			}
-			
-			editor.update();
-		});
 	}
 	
 	Toolbar.prototype = {
