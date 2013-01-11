@@ -50,6 +50,7 @@ define(function () {
 		this.view = view;
 		
 		this.distance = 25.0;
+		this.maxDistance = 50.0;
 		this.yaw = 0.0;
 		this.pitch = 0.0;
 		this.roll = 0.0;
@@ -63,6 +64,20 @@ define(function () {
 			0.1,
 			10000
 		);
+		
+		var cube;
+		
+		cube = new THREE.Mesh( new THREE.CubeGeometry( 1, 1, 1 ), new THREE.MeshNormalMaterial() );
+		cube.position.x = 1;
+		view.scene.add(cube);
+		
+		cube = new THREE.Mesh( new THREE.CubeGeometry( 1, 1, 1 ), new THREE.MeshNormalMaterial() );
+		cube.position.y = 2;
+		view.scene.add(cube);
+		
+		cube = new THREE.Mesh( new THREE.CubeGeometry( 1, 1, 1 ), new THREE.MeshNormalMaterial() );
+		cube.position.z = 3;
+		view.scene.add(cube);
 		
 		this.entity.useQuaternion = true;
 		this.entity.useTarget = false;
@@ -81,7 +96,7 @@ define(function () {
 			console.log("TODO");
 		},
 		
-		turn: function (yaw, pitch, roll) {
+		turn: function (pitch, yaw, roll) {
 			this.yaw = (this.yaw + degrees(yaw)) % P2;
 			this.pitch = (this.pitch + degrees(pitch)) % P2;
 			this.roll = (this.roll + degrees(roll)) % P2;
@@ -105,16 +120,21 @@ define(function () {
 		zoom: function (x) {
 			this.distance += x;
 			if (this.distance < 1) this.distance = 1;
-			if (this.distance > 50) this.distance = 50;
+			if (this.distance > this.maxDistance) this.distance = this.maxDistance;
 		},
 		
 		update: function () {
+			// Updates the thing we look at (usually shown as three axis lines)
 			this.target.update();
 			
+			// Avoid crappy camera movement so lookAt knows context
+			this.entity.up.y = sin(P2-this.yaw);
+			
+			// Position the camera (local to the rig)
 			this.entity.position.set(
-				sin(this.pitch) * cos(this.yaw) * this.distance,
-				cos(this.pitch) * this.distance,
-				sin(this.yaw) * this.distance
+				cos(this.pitch)* sin(this.yaw) * this.distance ,
+				cos(this.yaw) * this.distance,
+				sin(this.pitch) * sin(this.yaw) * this.distance
 			);
 			
 			this.entity.lookAt(this.target.position);
