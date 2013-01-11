@@ -6,9 +6,8 @@ define(['Mode', 'Grid'], function (Mode, Grid) {
 	];
 	
 	function ObjectMode(editor) {
-		Mode.call(this, arguments);
+		Mode.construct(this, 'object', editor);
 		
-		this.id = 'object';
 		this.grid = new Grid(this);
 		
 		requirejs(defaultTools, function () {

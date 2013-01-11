@@ -1,9 +1,10 @@
 'use strict';
 
 define(['Camera'], function (Camera) {
-	function Mode(editor) {
+	function Mode(id, editor) {
 		if (!editor) { throw "Must pass an Editor"; }
 		
+		this.id = id;
 		this.editor = editor;
 		this.scene = new THREE.Scene();
 		this.camera = new Camera(this);
@@ -42,6 +43,10 @@ define(['Camera'], function (Camera) {
 		}
 		
 		return p;
+	};
+	
+	Mode.construct = function (it, id, editor) {
+		Mode.call(it, id, editor);
 	};
 	
 	return Mode;
