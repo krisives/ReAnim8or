@@ -133,6 +133,16 @@ html, body {
 	line-height: 32px;
 }
 
+#topbar .nav-pills li a {
+	color: #666;
+}
+
+#topbar .nav-pills li.active a {
+	background: #777;
+	color: #eee;
+	text-shadow: 0 1px #222;
+}
+
 #leftbar {
 	width: 62px;
 	left: 0;

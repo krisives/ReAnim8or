@@ -55,11 +55,13 @@ define(['Camera', 'Toolbar', 'Scene', 'Grid', 'Menu'], function (Camera, Toolbar
 			
 			if (this.toolbar) { this.toolbar.activate(); }
 			$('.mode-' + this.id).show();
+			$('.topbar-mode-' + this.id).addClass('active');
 		},
 		
 		deactivate: function () {
 			if (this.toolbar) { this.toolbar.deactivate(); }
 			$('.mode-' + this.id).hide();
+			$('.topbar-mode-' + this.id).removeClass('active');
 		}
 	};
 	

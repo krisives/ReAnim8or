@@ -13,6 +13,21 @@ define(function () {
 		this.active = null;
 		
 		editor.toolbar = this;
+		
+		this.node.find('a').each(function (index, a) {
+			a = $(a);
+			
+			a.click(function (e) {
+				if (a.is('.disabled')) {
+					return;
+				}
+				
+				$.each(Toolbar.hooks, function (index, hook) {
+					if (a.data(hook.attr) === null) { return; }
+					hook.f(e, a, toolbar);
+				});
+			});
+		});
 	}
 	
 	Toolbar.prototype = {
@@ -128,8 +143,21 @@ define(function () {
 					f();
 				}
 			});
-		},
+		}
 	};
+	
+	Toolbar.hooks = [];
+	
+	Toolbar.addHook = function (attr, f) {
+		Toolbar.hooks.push({
+			attr: attr,
+			f: f
+		});
+	};
+	
+	Toolbar.addHook('mode', function (e, button, toolbar) {
+		toolbar.editor.changeMode(button.data('mode'));
+	});
 	
 	return Toolbar;
 });
