@@ -75,7 +75,10 @@ define(function () {
 		cube.position.y = 2;
 		view.scene.add(cube);
 		
-		cube = new THREE.Mesh( new THREE.CubeGeometry( 1, 1, 1 ), new THREE.MeshNormalMaterial() );
+		cube = new THREE.Mesh( new THREE.CubeGeometry( 1, 1, 1 ), 
+			new THREE.MeshBasicMaterial( { color: 0xaaaaaa, shading: THREE.FlatShading, wireframe: 1} )
+		);
+		
 		cube.position.z = 3;
 		view.scene.add(cube);
 		

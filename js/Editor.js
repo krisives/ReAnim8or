@@ -4,7 +4,7 @@ define(['Mouse', 'Menu', 'Toolbar'],
 function (Mouse, Menu, Toolbar) {
 	var defaultFormats = ['Formats/An8'];
 	var defaultModes = ['Modes/Object'];
-	var defaultTools = ['Tools/View'];
+	var defaultTools = ['Tools/Shading', 'Tools/View'];
 	
 	function Editor(node) {
 		var editor = this;
