@@ -151,7 +151,7 @@ function (Mouse, Menu, Toolbar) {
 			this.update();
 			
 			if (this.mode && this.mode.camera) {
-				this.renderer.render(this.mode.scene, this.mode.camera.entity);
+				this.renderer.render(this.mode.scene.root, this.mode.camera.entity);
 			}
 		},
 		
