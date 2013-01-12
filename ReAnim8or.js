@@ -14,7 +14,7 @@ requirejs(['Dialog', 'Editor', 'Mouse'], function (Dialog, Editor, Mouse) {
 		$('.tip').tooltip({container: '#ui'});
 		
 		function isAllowable(e) {
-			var node = $(e.srcElement);
+			var node = $(e.target);
 			var test = 'textarea';
 			
 			if (node.is(test) || node.parents(test).length > 0) {
@@ -42,7 +42,7 @@ requirejs(['Dialog', 'Editor', 'Mouse'], function (Dialog, Editor, Mouse) {
 				}
 			})
 			.keydown(function (e) {
-				if ($(e.srcElement).parents('textarea').length > 0) {
+				if ($(e.target).parents('textarea').length > 0) {
 					return;
 				}
 				
@@ -93,7 +93,7 @@ requirejs(['Dialog', 'Editor', 'Mouse'], function (Dialog, Editor, Mouse) {
 		}
 		
 		function cancel(e) {
-			var target = $(e.srcElement);
+			var target = $(e.target);
 			
 			$('.popmenu').each(function (index, popmenu) {
 				popmenu = $(popmenu);

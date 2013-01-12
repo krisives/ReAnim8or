@@ -328,8 +328,9 @@ button {
 	cursor: pointer;
 }
 
-textarea {
-	
+textarea,
+input {
+	user-select: text !important;
 }
 
 .fill {
