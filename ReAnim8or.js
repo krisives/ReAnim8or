@@ -9,22 +9,45 @@ requirejs(['Dialog', 'Editor', 'Mouse'], function (Dialog, Editor, Mouse) {
 		$(window)
 			.attr('unselectable', 'on')
 			.css('user-select', 'none')
-			.on('selectstart', false)
-			.on('contextmenu', false);
+			.on('selectstart', false);
+		
+		function isAllowable(e) {
+			var node = $(e.srcElement);
+			var test = 'textarea';
+			
+			if (node.is(test) || node.parents(test).length > 0) {
+				return true;
+			}
+			
+			return false
+		}
+		
+		$(window).contextmenu(function (e) {
+			if (!isAllowable(e)) {
+				e.preventDefault();
+			}
+		});
 		
 		$(window)
 			.mousedown(function (e) {
-				e.preventDefault();
-				return false;
+				if (!isAllowable(e)) {
+					e.preventDefault();
+				}
 			})
 			.keydown(function (e) {
+				if ($(e.srcElement).parents('textarea').length > 0) {
+					return;
+				}
+				
 				if (e.ctrlKey && e.shiftKey) {
 					switch (e.keyCode) {
 					case 74: return;
 					}
 				}
 				
-				e.preventDefault();
+				if (!isAllowable(e)) {
+					e.preventDefault();
+				}
 			})
 		;
 		

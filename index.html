@@ -69,7 +69,7 @@
 		<div class="more">
 			<a><i class="icon-star"></i> New</a>
 			<div class="separator"></div>
-			<a><i class="icon-upload"></i> Import</a>
+			<a data-open="#object-import"><i class="icon-upload"></i> Import</a>
 			<a><i class="icon-download"></i> Export</a>
 			<div class="separator"></div>
 			<a><i class="icon-check"></i> Some Object</a>
@@ -265,6 +265,25 @@
 		</div>
 	</div>
 </div>
+
+<div
+	class="dialog"
+	id="object-import"
+	style="display: none; width: 400px; height: 200px;"
+	data-center="center"
+>
+	<div class="title">Object Import</div>
+	<div class="content">
+		<textarea></textarea>
+		
+		<div class="foot">
+			<a class="btn btn-primary pull-right" data-close="#open">
+				Open
+			</a>
+		</div>
+	</div>
+</div>
+
 
 </div>
 </div>
