@@ -3,7 +3,6 @@
 define(['Tool', 'Mouse'], function (Tool, Mouse) {
 	var Vector3 = THREE.Vector3;
 	var Vector2 = THREE.Vector2;
-	var Quaternion = THREE.Quaternion;
 	
 	function ViewTool(editor, toolbar) {
 		var tool = this;
@@ -11,17 +10,16 @@ define(['Tool', 'Mouse'], function (Tool, Mouse) {
 		Tool.construct(this, 'view', editor, toolbar);
 		
 		this.button = toolbar.node.find('.tool-view');
-		this.isGlobal = true;
 		this.panning = false;
 		this.rotating = false;
+		this.zooming = false;
 		this.mouseRotate = new Vector3();
-		this.q = new Quaternion();
 		
 		this.button.click(function () {
-			tool.editor.mode.toolbar.changeTool(tool);
+			toolbar.toggleTool(tool, tool.button.hasClass('active'));
 		});
 		
-		Mouse.on.down(function (e) {
+		Mouse.on.down(this.createHandler(function (e) {
 			switch (e.button) {
 			case 0:
 				tool.rotating = true;
@@ -33,9 +31,9 @@ define(['Tool', 'Mouse'], function (Tool, Mouse) {
 				tool.panning = true;
 				break;
 			}
-		});
+		}));
 		
-		Mouse.on.up(function (e) {
+		Mouse.on.up(this.createHandler(function (e) {
 			switch (e.button) {
 			case 0:
 				tool.rotating = false;
@@ -47,9 +45,9 @@ define(['Tool', 'Mouse'], function (Tool, Mouse) {
 				tool.panning = false;
 				break;
 			}
-		});
+		}));
 		
-		Mouse.on.move(function (e) {
+		Mouse.on.move(this.createHandler(function (e) {
 			if (tool.panning) {
 				tool.pan();
 			}
@@ -61,12 +59,39 @@ define(['Tool', 'Mouse'], function (Tool, Mouse) {
 			if (tool.zooming) {
 				tool.zoom();
 			}
-		});
+		}));
+		
+		this.deactivate();
 	}
 	
 	var projector = new THREE.Projector();
 	
-	ViewTool.prototype = {
+	ViewTool.prototype = Tool.extend({
+		getCamera: function () {
+			if (!this.editor.mode) { return null; }
+			return this.editor.mode.camera;
+		},
+		
+		activate: function () {
+			var camera = this.getCamera();
+			
+			if (camera && camera.target) {
+				camera.target.entity.visible = true;
+			}
+		},
+		
+		deactivate: function () {
+			var camera = this.getCamera();
+			
+			this.panning = false;
+			this.rotating = false;
+			this.zooming = false;
+			
+			if (camera && camera.target) {
+				camera.target.entity.visible = false;
+			}
+		},
+		
 		pan: function () {
 			var camera = this.editor.mode.camera;
 			var x = Mouse.delta.x / this.editor.width;
@@ -98,7 +123,7 @@ define(['Tool', 'Mouse'], function (Tool, Mouse) {
 		zoomEnd: function () {
 			this.zooming = false;
 		}
-	};
+	});
 	
 	return ViewTool;
 });

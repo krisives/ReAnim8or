@@ -11,9 +11,7 @@ define(function () {
 		this.toolbar = toolbar;
 	}
 	
-	function optional() {
-		
-	}
+	function optional() { }
 	
 	Tool.prototype = {
 		activate: optional,
@@ -38,7 +36,7 @@ define(function () {
 	};
 	
 	Tool.extend = function (o) {
-		return $({}, Tool.prototype, o);
+		return $.extend({}, Tool.prototype, o);
 	};
 	
 	Tool.construct = function (it, id, editor, mode) {

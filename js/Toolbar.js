@@ -17,7 +17,7 @@ define(function () {
 	
 	Toolbar.prototype = {
 		findTool: function (k) {
-			if (!k) { throw "Cannot find tool by null/empty"; }
+			if (!k) { return null; }
 			
 			if (typeof k === 'String') {
 				if (!(k in this.tools)) {
@@ -61,12 +61,10 @@ define(function () {
 				return;
 			}
 			
-			if (this.active.unselected) {
-				try {
-					this.active.unselected();
-				} catch (e) {
-					this.editor.error(e);
-				}
+			try {
+				this.active.deactivate();
+			} catch (e) {
+				this.editor.error(e);
 			}
 			
 			this.active = tool;
@@ -75,43 +73,19 @@ define(function () {
 				return;
 			}
 			
-			if (this.active.selected) {
-				try {
-					this.active.selected();
-				} catch (e) {
-					this.editor.error(e);
-				}
+			try {
+				this.active.activate();
+			} catch (e) {
+				this.editor.error(e);
 			}
 		},
 		
-		handler: function (k) {
-			var toolbar = this;
+		toggleTool: function (tool, active) {
+			if (typeof active === 'undefined') {
+				active = (this.active === tool);
+			}
 			
-			return function (e) {
-				var f;
-				
-				e.preventDefault();
-				
-				if (!this.active) {
-					return;
-				}
-				
-				if (typeof k === 'function') {
-					f = k;
-				} else {
-					f = this.active[k];
-				}
-				
-				if (!f) {
-					return;
-				}
-				
-				try {
-					f(e);
-				} catch (e) {
-					toolbar.editor.error(e);
-				}
-			};
+			this.changeTool(active ? null : tool);
 		},
 		
 		loadTools: function (tools, f) {
