@@ -86,7 +86,6 @@ define(['Tool', 'Mouse', 'Keyboard'], function (Tool, Mouse, Keyboard) {
 			}
 			
 			this.button.addClass('active');
-			console.log("Activate");
 		},
 		
 		deactivate: function () {
@@ -101,7 +100,6 @@ define(['Tool', 'Mouse', 'Keyboard'], function (Tool, Mouse, Keyboard) {
 			}
 			
 			this.button.removeClass('active');
-			console.log("Deactivate");
 		},
 		
 		pan: function () {
