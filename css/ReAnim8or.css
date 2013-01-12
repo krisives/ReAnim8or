@@ -67,6 +67,8 @@ html, body {
 	background: #06a;
 	text-decoration: none;
 	text-shadow: 0 1px #004;
+	background: linear-gradient(#059, #07b);
+	background: -moz-linear-gradient(#059, #07b);
 	background: -webkit-linear-gradient(#059, #07b);
 }
 
@@ -93,6 +95,8 @@ html, body {
 	min-width: 90px;
 	border: 1px solid #333;
 	border-top: none;
+	background: linear-gradient(#fff 10%, #ccc);
+	background: -moz-linear-gradient(#fff 10%, #ccc);
 	background: -webkit-linear-gradient(#fff 10%, #ccc);
 	text-shadow: 0 1px #fff;
 }
@@ -281,6 +285,8 @@ html, body {
 	height: 32px;
 	line-height: 32px;
 	background: #eee;
+	background: linear-gradient(#fff, #aaa);
+	background: -moz-linear-gradient(#fff, #aaa);
 	background: -webkit-linear-gradient(#fff, #aaa);
 }
 
