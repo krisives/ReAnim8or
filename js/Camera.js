@@ -93,7 +93,7 @@ define(function () {
 	
 	Camera.prototype = {
 		reset: function () {
-			console.log("TODO");
+			this.yaw = this.pitch = this.roll = 0.0;
 		},
 		
 		turn: function (pitch, yaw, roll) {

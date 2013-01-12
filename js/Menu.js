@@ -43,6 +43,10 @@ define(['Dialog'], function (Dialog) {
 		this.bind('mode-object', function () { this.editor.changeMode('object'); });
 		this.bind('mode-figure', function () { this.editor.changeMode('figure'); });
 		this.bind('mode-sequence', function () { this.editor.changeMode('sequence'); });
+		
+		this.node.mousemove(function () {
+			$('.popmenu').removeClass('open');
+		});
 	}
 	
 	Menu.prototype = {
