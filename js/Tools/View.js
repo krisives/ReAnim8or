@@ -1,6 +1,6 @@
 'use strict';
 
-define(['Tool', 'Mouse'], function (Tool, Mouse) {
+define(['Tool', 'Mouse', 'Keyboard'], function (Tool, Mouse, Keyboard) {
 	var Vector3 = THREE.Vector3;
 	var Vector2 = THREE.Vector2;
 	
@@ -16,7 +16,13 @@ define(['Tool', 'Mouse'], function (Tool, Mouse) {
 		this.mouseRotate = new Vector3();
 		
 		this.button.click(function () {
-			toolbar.toggleTool(tool, tool.button.hasClass('active'));
+			setTimeout(function () {
+				toolbar.toggleTool(tool);
+			}, 1);
+		});
+		
+		Keyboard.on.down('ctrl+r', function () {
+			toolbar.toggleTool(tool);
 		});
 		
 		Mouse.on.down(this.createHandler(function (e) {
@@ -78,6 +84,9 @@ define(['Tool', 'Mouse'], function (Tool, Mouse) {
 			if (camera && camera.target) {
 				camera.target.entity.visible = true;
 			}
+			
+			this.button.addClass('active');
+			console.log("Activate");
 		},
 		
 		deactivate: function () {
@@ -90,6 +99,9 @@ define(['Tool', 'Mouse'], function (Tool, Mouse) {
 			if (camera && camera.target) {
 				camera.target.entity.visible = false;
 			}
+			
+			this.button.removeClass('active');
+			console.log("Deactivate");
 		},
 		
 		pan: function () {

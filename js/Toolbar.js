@@ -61,10 +61,12 @@ define(function () {
 				return;
 			}
 			
-			try {
-				this.active.deactivate();
-			} catch (e) {
-				this.editor.error(e);
+			if (this.active) {
+				try {
+					this.active.deactivate();
+				} catch (e) {
+					this.editor.error(e);
+				}
 			}
 			
 			this.active = tool;
