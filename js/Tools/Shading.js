@@ -24,12 +24,36 @@ define(['Tool'], function (Tool) {
 			});
 		});
 		
+		this.wireMaterial = new THREE.MeshBasicMaterial({
+			wireframe: true,
+			depthTest: true
+		});
+		
 		this.updateShading();
 	}
 	
 	Shading.prototype = Tool.extend({
 		updateShading: function () {
 			this.shadingMode = this.node.find('.active').data('shading');
+			
+			switch (this.shadingMode) {
+			case 'wire': return this.wire();
+			case 'flat': return this.flat();
+			}
+			
+			return this.smooth();
+		},
+		
+		wire: function () {
+			
+		},
+		
+		flat: function () {
+			
+		},
+		
+		smooth: function () {
+			
 		}
 	});
 	
