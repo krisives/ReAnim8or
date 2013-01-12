@@ -1,5 +1,12 @@
+'use strict';
+
+window.ReAnim8or = {
+	VERSION: '0.2'
+};
+
 requirejs.config({
 	baseUrl: 'js',
+	urlArgs: String("v=" + ReAnim8or.VERSION)
 });
 
 requirejs(['Dialog', 'Editor', 'Mouse'], function (Dialog, Editor, Mouse) {
