@@ -1,7 +1,7 @@
 'use strict';
 
-define(['Mouse', 'Menu', 'Toolbar'],
-function (Mouse, Menu, Toolbar) {
+define(['Mouse', 'Menu', 'Toolbar', 'Project'],
+function (Mouse, Menu, Toolbar, Project) {
 	var defaultFormats = ['Formats/An8'];
 	var defaultModes = ['Modes/Object', 'Modes/Figure', 'Modes/Sequence'];
 	var defaultTools = ['Tools/Shading', 'Tools/View'];
@@ -12,10 +12,12 @@ function (Mouse, Menu, Toolbar) {
 		
 		this.node = node;
 		this.renderer = new THREE.WebGLRenderer();
+		
 		this.menu = new Menu(this, '#menu');
 		this.topbar = new Toolbar(this, 'topbar');
 		
 		this.running = false;
+		this.projects = {};
 		this.plugins = {};
 		this.formats = {};
 		this.modes = {};
@@ -54,6 +56,9 @@ function (Mouse, Menu, Toolbar) {
 		});
 		
 		this.topbar.loadTools(defaultTools);
+		
+		// Start with a default empty project
+		this.addProject(new Project(this));
 	}
 	
 	Editor.prototype = {
@@ -242,7 +247,13 @@ function (Mouse, Menu, Toolbar) {
 		},
 		
 		open: function () {
-			
+			console.log("TODO");
+		},
+		
+		addProject: function (p) {
+			if (!p || p.id <= 0) { return; }
+			this.projects[p.id] = p;
+			this.menu.update();
 		}
 	};
 	

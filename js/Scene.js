@@ -13,6 +13,22 @@ define(function () {
 		add: function (e) {
 			if (!e) { return; }
 			this.root.add(e);
+		},
+		
+		walk: function (f) {
+			function visit(node) {
+				var i;
+				var list = node.children;
+				var len = list.length;
+				
+				f(node);
+				
+				for (i=0; i < len; i++) {
+					f(list[i]);
+				}
+			}
+			
+			visit(this.root);
 		}
 	};
 	

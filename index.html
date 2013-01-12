@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+	<script>window.ReAnim8or = { VERSION: '0.24' };</script>
 	<title>ReAnim8or</title>
 	<link rel="shortcut icon" href="ReAnim8or.ico">
 	<link rel="icon" href="ReAnim8or.ico">
@@ -23,7 +24,16 @@
 		<span>File</span>
 		
 		<div class="more">
-			<a data-open="#open"><i class="icon-file"></i> Open</a>
+			<a class="menu-file-new" data-open="#open">
+				<i class="icon-asterisk"></i>
+				New
+			</a>
+			<div class="separator"></div>
+			<label class="menu-file-open" for="project-open-input">
+				<i class="icon-file"></i>
+				Open
+			</label>
+			<div class="separator"></div>
 			<a><i class="icon-save"></i> Save</a>
 			<a><i class="icon-save"></i> Save As...</a>
 			<div class="separator"></div>
@@ -69,7 +79,10 @@
 		<div class="more">
 			<a><i class="icon-star"></i> New</a>
 			<div class="separator"></div>
-			<a data-open="#object-import"><i class="icon-upload"></i> Import</a>
+			<label for="object-import-input">
+				<i class="icon-upload"></i>
+				Import
+			</label>
 			<a><i class="icon-download"></i> Export</a>
 			<div class="separator"></div>
 			<a><i class="icon-check"></i> Some Object</a>
@@ -91,7 +104,7 @@
 		</div>
 	</div>
 	
-	<div class="submenu">
+	<div class="submenu mode-object">
 		<span>Build</span>
 		
 		<div class="more">
@@ -100,6 +113,22 @@
 			<div class="separator"></div>
 			<a><i class=""></i> Convert to Mesh</a>
 			<a><i class=""></i> Join Solids</a>
+		</div>
+	</div>
+	
+	<div class="submenu">
+		<span>Project</span>
+		
+		<div class="more">
+			<a href="#">
+				<i class="icon-edit"></i>
+				Edit Info
+			</a>
+			<div class="separator"></div>
+			<a href="#">
+				<i class="icon-check"></i>
+				Project Name
+			</a>
 		</div>
 	</div>
 	
@@ -211,6 +240,10 @@
 </div>
 <div id="editor"></div>
 <div id="ui">
+<div id="ui-hidden">
+<input id="project-open-input" type="file" />
+<input id="object-import-input" type="file" />
+</div>
 <div id="hud">
 	<div id="hud-view-menu" class="popmenu">
 		<a><i class="icon-check"></i> Front</a>
@@ -270,43 +303,6 @@
 		</div>
 	</div>
 </div>
-
-<div
-	class="dialog"
-	id="open"
-	style="display: none; width: 400px; height: 200px;"
-	data-center="center"
->
-	<div class="foot">
-		<a class="btn btn-primary pull-right" data-close="#open">
-			Open
-		</a>
-	</div>
-	<div class="title">Open</div>
-	<div class="content">
-		<input type="file">
-	</div>
-</div>
-
-<div
-	class="dialog"
-	id="object-import"
-	style="display: none; width: 400px; height: 200px;"
-	data-center="center"
->
-	<div class="foot">
-		<a class="btn btn-primary pull-right" data-close="#open">
-			Open
-		</a>
-	</div>
-	<div class="title">Object Import</div>
-	<div class="content">
-		<div class="row-fluid">
-			<textarea class="span12" rows="5"></textarea>
-		</div>
-	</div>
-</div>
-
 
 </div>
 </div>

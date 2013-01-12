@@ -65,33 +65,14 @@ define(function () {
 			10000
 		);
 		
-		var cube;
-		
-		cube = new THREE.Mesh( new THREE.CubeGeometry( 1, 1, 1 ), new THREE.MeshNormalMaterial() );
-		cube.position.x = 1;
-		view.scene.add(cube);
-		
-		cube = new THREE.Mesh( new THREE.CubeGeometry( 1, 1, 1 ), new THREE.MeshNormalMaterial() );
-		cube.position.y = 2;
-		view.scene.add(cube);
-		
-		cube = new THREE.Mesh( new THREE.CubeGeometry( 1, 1, 1 ), 
-			new THREE.MeshBasicMaterial( { color: 0xaaaaaa, shading: THREE.FlatShading, wireframe: 1} )
-		);
-		
-		cube.position.z = 3;
-		view.scene.add(cube);
-		
 		this.entity.useQuaternion = true;
 		this.entity.useTarget = false;
-		//this.entity.position.y = this.distance;
 		
 		this.rig.add(this.entity);
 		this.rig.add(this.target.entity);
 		view.scene.add(this.rig);
 		
 		this.update();
-		//this.entity.lookAt(this.target.position);
 	}
 	
 	Camera.prototype = {

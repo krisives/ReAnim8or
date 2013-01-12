@@ -1,7 +1,7 @@
 'use strict';
 
-window.ReAnim8or = {
-	VERSION: '0.22'
+window.ReAnim8or = window.ReAnim8or || {
+	VERSION: 'Unknown'
 };
 
 requirejs.config({

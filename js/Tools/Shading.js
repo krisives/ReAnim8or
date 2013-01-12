@@ -45,7 +45,9 @@ define(['Tool'], function (Tool) {
 		},
 		
 		wire: function () {
-			
+			this.editor.mode.scene.walk(function (e) {
+				console.log(e);
+			});
 		},
 		
 		flat: function () {

@@ -44,7 +44,9 @@ html, body {
 }
 
 #menu a,
-.popmenu a {
+#menu label,
+.popmenu a,
+.popmenu label {
 	color: #111;
 	padding: 2px 10px;
 	text-decoration: none;
@@ -52,13 +54,17 @@ html, body {
 }
 
 #menu a.disabled,
-.popmenu a.disabled {
+#menu label.disabled,
+.popmenu a.disabled,
+.popmenu label.disabled {
 	color: #888;
 	cursor: default;
 }
 
 #menu a:hover:not(.disabled),
-.popmenu a:hover:not(.disabled) {
+#menu label:hover:not(.disabled),
+.popmenu a:hover:not(.disabled),
+.popmenu label:hover:not(.disabled) {
 	color: #fff;
 	background: #059;
 	text-decoration: none;
@@ -213,6 +219,12 @@ html, body {
 	position: fixed;
 	top: 0; bottom: 0;
 	overflow: visible;
+}
+
+#ui-hidden {
+	position: absolute;
+	left: -9999px;
+	top: -9999px;
 }
 
 .dialog {
