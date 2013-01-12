@@ -23,7 +23,7 @@ define(function () {
 				}
 				
 				$.each(Toolbar.hooks, function (index, hook) {
-					if (a.data(hook.attr) === null) { return; }
+					if (!a.data(hook.attr)) { return; }
 					hook.f(e, a, toolbar);
 				});
 			});
