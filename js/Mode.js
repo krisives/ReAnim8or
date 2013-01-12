@@ -54,10 +54,12 @@ define(['Camera', 'Toolbar', 'Scene', 'Grid', 'Menu'], function (Camera, Toolbar
 			this.editor.menu.check(this.menuItem);
 			
 			if (this.toolbar) { this.toolbar.activate(); }
+			$('.mode-' + this.id).show();
 		},
 		
 		deactivate: function () {
 			if (this.toolbar) { this.toolbar.deactivate(); }
+			$('.mode-' + this.id).hide();
 		}
 	};
 	

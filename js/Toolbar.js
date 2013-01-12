@@ -20,12 +20,16 @@ define(function () {
 			if (this.active) {
 				this.active.activate();
 			}
+			
+			this.node.show();
 		},
 		
 		deactivate: function () {
 			if (this.active) {
 				this.active.deactivate();
 			}
+			
+			this.node.hide();
 		},
 		
 		findTool: function (k) {
