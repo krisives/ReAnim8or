@@ -1,7 +1,7 @@
 'use strict';
 
 window.ReAnim8or = {
-	VERSION: '0.21'
+	VERSION: '0.22'
 };
 
 requirejs.config({
@@ -117,7 +117,7 @@ requirejs(['Dialog', 'Editor', 'Mouse'], function (Dialog, Editor, Mouse) {
 		Mouse.on.down(cancel);
 		Mouse.on.up(cancel);
 		
-		$('[data-menu]').mousedown(function (e) {
+		$('[data-menu]').click(function (e) {
 			$($(this).data('menu')).addClass('open');
 		});
 		
