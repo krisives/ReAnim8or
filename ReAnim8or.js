@@ -6,11 +6,6 @@ requirejs(['Dialog', 'Editor', 'Mouse'], function (Dialog, Editor, Mouse) {
 	$(function () {
 		$('.tip').tooltip({container: '#ui'});
 		
-		$(window)
-			.attr('unselectable', 'on')
-			.css('user-select', 'none')
-			.on('selectstart', false);
-		
 		function isAllowable(e) {
 			var node = $(e.srcElement);
 			var test = 'textarea';
@@ -21,6 +16,11 @@ requirejs(['Dialog', 'Editor', 'Mouse'], function (Dialog, Editor, Mouse) {
 			
 			return false
 		}
+		
+		$(window)
+			.attr('unselectable', 'on')
+			.css('user-select', 'none')
+			.on('selectstart', isAllowable);
 		
 		$(window).contextmenu(function (e) {
 			if (!isAllowable(e)) {
@@ -41,8 +41,19 @@ requirejs(['Dialog', 'Editor', 'Mouse'], function (Dialog, Editor, Mouse) {
 				
 				if (e.ctrlKey && e.shiftKey) {
 					switch (e.keyCode) {
+					// Debugger
 					case 74: return;
 					}
+				}
+				
+				switch (e.keyCode) {
+				case 8: return;
+				case 13: return;
+				case 16: return;
+				case 17: return;
+				case 27: return;
+				case 74: return;
+				case 122: return;
 				}
 				
 				if (!isAllowable(e)) {

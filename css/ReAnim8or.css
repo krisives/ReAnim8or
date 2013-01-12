@@ -253,6 +253,14 @@ html, body {
 	text-shadow: none;
 }
 
+.dialog > * {
+	opacity: 0.75;
+}
+
+.dialog:last-child > * {
+	opacity: 1.0;
+}
+
 .dialog > .content {
 	position: absolute;
 	background: #fff;
@@ -263,13 +271,21 @@ html, body {
 	left: 2px;
 }
 
-.dialog > .content > .foot {
+.dialog > .foot {
 	position: absolute;
 	bottom: 0;
 	left: 0;
 	right: 0;
 	padding: 3px;
+	z-index: 5;
+	height: 32px;
+	line-height: 32px;
 }
+
+.dialog .foot ~ .content {
+	bottom: 40px;
+}
+
 
 .dialog.dragging {
 	border-color: #fff;
@@ -302,6 +318,20 @@ button {
 
 #hud-view {
 	cursor: pointer;
+}
+
+textarea {
+	
+}
+
+.fill {
+	position: absolute;
+	display: block;
+	width: auto;
+	height: auto;
+	float: none;
+	margin: 0;
+	left: 0; right: 0; top: 0; bottom: 0;
 }
 
 
