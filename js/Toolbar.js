@@ -1,11 +1,13 @@
 'use strict';
 
 define(function () {
-	function Toolbar(editor) {
+	function Toolbar(editor, id) {
 		var toolbar = this;
+		if (id === null || id.length <= 0) { throw "Must pass a Dom ID of the toolbar container"; }
 		if (!editor) { throw "Must pass an editor"; }
 		
-		this.node = $('#leftbar, #topbar');
+		this.id = id;
+		this.node = $('#' + id);
 		this.editor = editor;
 		this.tools = {};
 		this.active = null;
@@ -110,7 +112,31 @@ define(function () {
 					toolbar.editor.error(e);
 				}
 			};
-		}
+		},
+		
+		loadTools: function (tools, f) {
+			var toolbar = this;
+			var editor = toolbar.editor;
+			
+			requirejs(tools, function () {
+				var loaded = arguments, i, len = loaded.length, tool;
+				
+				for (i=0; i < len; i++) {
+					try {
+						tool = loaded[i];
+						toolbar.addTool(new tool(editor, toolbar));
+					} catch (e) {
+						editor.error(e);
+					}
+				}
+				
+				editor.update();
+				
+				if (f) {
+					f();
+				}
+			});
+		},
 	};
 	
 	return Toolbar;

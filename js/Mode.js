@@ -1,6 +1,6 @@
 'use strict';
 
-define(['Camera'], function (Camera) {
+define(['Camera', 'Toolbar'], function (Camera, Toolbar) {
 	function Mode(id, editor) {
 		if (!editor) { throw "Must pass an Editor"; }
 		
@@ -8,6 +8,7 @@ define(['Camera'], function (Camera) {
 		this.editor = editor;
 		this.scene = new THREE.Scene();
 		this.camera = new Camera(this);
+		this.toolbar = new Toolbar(editor, 'ui-' + id);
 	}
 	
 	function optional() {

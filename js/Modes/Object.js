@@ -2,30 +2,14 @@
 
 define(['Mode', 'Grid'], function (Mode, Grid) {
 	var defaultTools = [
-		'Tools/View'
+		
 	];
 	
 	function ObjectMode(editor) {
 		Mode.construct(this, 'object', editor);
 		
 		this.grid = new Grid(this);
-		
-		requirejs(defaultTools, function () {
-			var loaded = arguments;
-			var i, len = loaded.length;
-			var tool;
-			
-			for (i=0; i < len; i++) {
-				try {
-					tool = loaded[i];
-					editor.toolbar.addTool(new tool(editor, editor.toolbar));
-				} catch (e) {
-					editor.error(e);
-				}
-			}
-			
-			editor.update();
-		});
+		this.toolbar.loadTools(defaultTools);
 	}
 	
 	ObjectMode.prototype = Mode.extend({

@@ -4,6 +4,7 @@ define(['Mouse', 'Menu', 'Toolbar'],
 function (Mouse, Menu, Toolbar) {
 	var defaultFormats = ['Formats/An8'];
 	var defaultModes = ['Modes/Object'];
+	var defaultTools = ['Tools/View'];
 	
 	function Editor(node) {
 		var editor = this;
@@ -12,7 +13,7 @@ function (Mouse, Menu, Toolbar) {
 		this.node = node;
 		this.renderer = new THREE.WebGLRenderer();
 		this.menu = new Menu(this, '#menu');
-		this.toolbar = new Toolbar(this);
+		this.topbar = new Toolbar(this, 'topbar');
 		
 		this.running = false;
 		this.plugins = {};
@@ -51,6 +52,8 @@ function (Mouse, Menu, Toolbar) {
 				}
 			});
 		});
+		
+		this.topbar.loadTools(defaultTools);
 	}
 	
 	Editor.prototype = {

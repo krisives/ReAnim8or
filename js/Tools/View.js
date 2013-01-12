@@ -10,7 +10,7 @@ define(['Tool', 'Mouse'], function (Tool, Mouse) {
 		
 		Tool.construct(this, 'view', editor, toolbar);
 		
-		this.button = editor.toolbar.node.find('.tool-view');
+		this.button = toolbar.node.find('.tool-view');
 		this.isGlobal = true;
 		this.panning = false;
 		this.rotating = false;
@@ -18,7 +18,7 @@ define(['Tool', 'Mouse'], function (Tool, Mouse) {
 		this.q = new Quaternion();
 		
 		this.button.click(function () {
-			editor.toolbar.changeTool(tool);
+			tool.editor.mode.toolbar.changeTool(tool);
 		});
 		
 		Mouse.on.down(function (e) {
