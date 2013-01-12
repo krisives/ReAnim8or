@@ -16,6 +16,18 @@ define(function () {
 	}
 	
 	Toolbar.prototype = {
+		activate: function () {
+			if (this.active) {
+				this.active.activate();
+			}
+		},
+		
+		deactivate: function () {
+			if (this.active) {
+				this.active.deactivate();
+			}
+		},
+		
 		findTool: function (k) {
 			if (!k) { return null; }
 			

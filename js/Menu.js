@@ -40,9 +40,9 @@ define(['Dialog'], function (Dialog) {
 			menu.editor.mode.camera.reset();
 		});
 		
-		this.bind('mode-object', function () { this.editor.changeMode('object'); });
-		this.bind('mode-figure', function () { this.editor.changeMode('figure'); });
-		this.bind('mode-sequence', function () { this.editor.changeMode('sequence'); });
+		this.bind('mode-object', function () { editor.changeMode('object'); });
+		this.bind('mode-figure', function () { editor.changeMode('figure'); });
+		this.bind('mode-sequence', function () { editor.changeMode('sequence'); });
 		
 		this.node.mousemove(function () {
 			$('.popmenu').removeClass('open');
@@ -51,7 +51,15 @@ define(['Dialog'], function (Dialog) {
 	
 	Menu.prototype = {
 		bind: function (x, f) {
-			$(['#menu', x].join('-')).click(f);
+			var item = $(['#menu', x].join('-'));
+			
+			item.click(function (e) {
+				if (item.is('.disabled')) {
+					return;
+				}
+				
+				f(e);
+			});
 		},
 		
 		update: function () {
@@ -65,6 +73,14 @@ define(['Dialog'], function (Dialog) {
 			setTimeout(function () {
 				menu.node.find('.submenu').removeClass('closed');
 			}, 0);
+		},
+		
+		uncheck: function (x) {
+			x.find('i').removeClass('icon-check').addClass('icon-check-empty');
+		},
+		
+		check: function (x) {
+			x.find('i').removeClass('icon-check-empty').addClass('icon-check');
 		}
 	};
 	

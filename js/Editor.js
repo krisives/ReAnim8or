@@ -3,7 +3,7 @@
 define(['Mouse', 'Menu', 'Toolbar'],
 function (Mouse, Menu, Toolbar) {
 	var defaultFormats = ['Formats/An8'];
-	var defaultModes = ['Modes/Object'];
+	var defaultModes = ['Modes/Object', 'Modes/Figure', 'Modes/Sequence'];
 	var defaultTools = ['Tools/Shading', 'Tools/View'];
 	
 	function Editor(node) {
@@ -212,6 +212,10 @@ function (Mouse, Menu, Toolbar) {
 		},
 		
 		changeMode: function (mode) {
+			if (mode !== null && typeof mode === 'string') {
+				mode = this.modes[mode];
+			}
+			
 			if (this.mode === mode) {
 				return;
 			}
@@ -219,6 +223,9 @@ function (Mouse, Menu, Toolbar) {
 			if (this.mode && this.mode.deactivate) {
 				this.mode.deactivate();
 			}
+			
+			// Stop any active topbar tool
+			this.topbar.changeTool(null);
 			
 			this.mode = mode;
 			
