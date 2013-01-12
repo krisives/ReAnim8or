@@ -8,16 +8,5 @@ You can see a live demo of whatever I consider "stable" here:
 
 * http://krisives.github.com/ReAnim8or/
 
-### So, what can it do?
-
-Right now just about nothing besides basic camera movement, UI, and a few other odd
-features.
-
-### How can I help?
-
-Press fork, make code.
-
-### How do I add a Tool?
-
-Make a new `.js` file inside `js/Tools`, then add it to the `defaultTools.txt` file. Make sure to call
-`Tool.construct` when extending it!
+### Continue to the Wiki
+If you can't find it in this README check the [Wiki](https://github.com/krisives/ReAnim8or/wiki)
