@@ -48,17 +48,11 @@ define(function () {
 		},
 		
 		findTool: function (k) {
-			if (!k) { return null; }
-			
-			if (typeof k === 'String') {
-				if (!(k in this.tools)) {
-					throw ["No tool for ", k].join('');
-				}
-				
+			if (typeof k === 'string') {
 				return this.tools[k];
 			}
 			
-			return k;
+			return k || null;
 		},
 		
 		addTool: function (tool) {

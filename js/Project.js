@@ -7,10 +7,13 @@ define(function () {
 		this.objects = {};
 		this.figures = {};
 		this.sequences = {};
+		this.history = [];
 	}
 	
 	Project.prototype = {
-		
+		action: function (action) {
+			
+		}
 	};
 	
 	return Project;

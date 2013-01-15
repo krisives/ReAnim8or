@@ -1,10 +1,18 @@
 'use strict';
 
-define(['Mouse', 'Menu', 'Toolbar', 'Project'],
-function (Mouse, Menu, Toolbar, Project) {
+define(['Mouse', 'Menu', 'Toolbar', 'Project', 'Dialog', 'PopupMenu'],
+function (Mouse, Menu, Toolbar, Project, Dialog, PopupMenu) {
 	var defaultFormats = ['Formats/An8'];
 	var defaultModes = ['Modes/Object', 'Modes/Figure', 'Modes/Sequence'];
 	var defaultTools = ['Tools/Shading', 'Tools/View'];
+	var defaultActions = {
+		openProject: 'openProject',
+		quit: 'quit',
+		about: 'about',
+		viewReset: 'viewReset',
+		changeMode: 'changeMode',
+		changeShading: 'changeShading'
+	};
 	
 	function Editor(node) {
 		var editor = this;
@@ -12,16 +20,24 @@ function (Mouse, Menu, Toolbar, Project) {
 		
 		this.node = node;
 		this.renderer = new THREE.WebGLRenderer();
-		
-		this.menu = new Menu(this, '#menu');
-		this.topbar = new Toolbar(this, 'topbar');
-		
 		this.running = false;
+		this.actions = {};
 		this.projects = {};
 		this.plugins = {};
 		this.formats = {};
 		this.modes = {};
 		this.mode = null;
+		
+		this.menu = new Menu(this, '#menu');
+		this.topbar = new Toolbar(this, 'topbar');
+		
+		//$('#ui .popmenu').each(function (index, popmenu) {
+		//	new PopupMenu(editor, popmenu);
+		//});
+		
+		$('#ui *[data-action]').each(function (index, src) {
+			editor.createTrigger(src);
+		});
 		
 		this.node.append(this.renderer.domElement);
 		this.renderer.setClearColorHex(0x666699, 1);
@@ -31,6 +47,10 @@ function (Mouse, Menu, Toolbar, Project) {
 		});
 		
 		this.resize();
+		
+		$.each(defaultActions, function (key, value) {
+			editor.addAction(key, value);
+		});
 		
 		requirejs(defaultFormats, function () {
 			var loaded = arguments;
@@ -62,6 +82,47 @@ function (Mouse, Menu, Toolbar, Project) {
 	}
 	
 	Editor.prototype = {
+		action: function (action, args) {
+			var f;
+			
+			if (typeof args === 'string') {
+				args = args.split(/[\s]+/);
+			} else {
+				args = args || [];
+			}
+			
+			args = args.filter(function (x) {
+				return x !== null && x.trim().length > 0;
+			});
+			
+			if (action in this.actions) {
+				f = this.actions[action];
+				
+				f.apply(this, args);
+			}
+			
+			if (this.project) {
+				this.project.action(action, args);
+			}
+		},
+		
+		addAction: function(action, f) {
+			var editor = this, k;
+			
+			if (typeof f === 'string') {
+				k = f;
+				
+				f = function () {
+					var args = arguments;
+					var member = editor[k];
+					if (!member) { return; }
+					member.apply(editor, args);
+				};
+			}
+			
+			this.actions[action] = f;
+		},
+		
 		error: function (e) {
 			if (!window.console) {
 				alert(arguments.join(' '));
@@ -233,20 +294,25 @@ function (Mouse, Menu, Toolbar, Project) {
 			this.topbar.changeTool(null);
 			
 			this.mode = mode;
-			
 			this.resize();
 			this.update();
 			
 			if (this.mode && this.mode.activate) {
 				this.mode.activate();
 			}
+			
+			this.changeShading();
 		},
 		
 		quit: function () {
-			return true;
+			window.close();
 		},
 		
-		open: function () {
+		openProject: function () {
+			console.log("TODO");
+		},
+		
+		importObject: function () {
 			console.log("TODO");
 		},
 		
@@ -254,6 +320,48 @@ function (Mouse, Menu, Toolbar, Project) {
 			if (!p || p.id <= 0) { return; }
 			this.projects[p.id] = p;
 			this.menu.update();
+		},
+		
+		about: function () {
+			Dialog.get('#about').show();
+		},
+		
+		viewReset: function () {
+			if (this.mode && this.mode.camera) {
+				this.mode.camera.reset();
+			}
+		},
+		
+		changeShading: function (shading) {
+			var tool = this.topbar.findTool('shading');
+			if (!tool) { return; }
+			tool.setShadingMode(shading);
+		},
+		
+		createTrigger: function (src, f) {
+			src = $(src);
+			
+			var editor = this;
+			var action = src.data('action');
+			var finish = function () {
+				editor.action(action, src.data('args'));
+			};
+			
+			var handler = function (e) {
+				if (f) {
+					f(finish, e);
+					return;
+				}
+				
+				finish();
+			};
+			
+			if (src.is('input[type=file]')) {
+				src.live('change', handler);
+				return;
+			}
+			
+			src.click(handler);
 		}
 	};
 	

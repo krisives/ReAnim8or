@@ -7,6 +7,8 @@ define(function () {
 		this.mode = mode;
 		this.editor = mode.editor;
 		this.root = new THREE.Scene();
+		this.world = new THREE.Object3D();
+		this.ui = new THREE.Object3D();
 	}
 	
 	Scene.prototype = {
@@ -16,19 +18,17 @@ define(function () {
 		},
 		
 		walk: function (f) {
-			function visit(node) {
-				var i;
-				var list = node.children;
-				var len = list.length;
-				
-				f(node);
+			function visit(list) {
+				if (!list) { return; }
+				var i, len = list.length, item;
 				
 				for (i=0; i < len; i++) {
-					f(list[i]);
+					f(item = list[i]);
+					visit(item.children);
 				}
 			}
 			
-			visit(this.root);
+			visit(this.world.children);
 		}
 	};
 	

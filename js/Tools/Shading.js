@@ -14,12 +14,16 @@ define(['Tool'], function (Tool) {
 			smooth: this.node.find('.tool-shading-smooth')
 		};
 		
+		this.menuNode = editor.menu.node.find('.menu-view-shading');
+		this.menuItems = {};
+		
 		$.each(this.buttons, function (key, button) {
+			tool.menuItems[key] = $('.menu-view-' + key);
 			button.data('shading', key);
 			
 			button.click(function () {
 				setTimeout(function () {
-					tool.updateShading();
+					tool.setShadingMode();
 				}, 1);
 			});
 		});
@@ -29,12 +33,20 @@ define(['Tool'], function (Tool) {
 			depthTest: true
 		});
 		
-		this.updateShading();
+		this.setShadingMode();
 	}
 	
 	Shading.prototype = Tool.extend({
-		updateShading: function () {
-			this.shadingMode = this.node.find('.active').data('shading');
+		setShadingMode: function (shading) {
+			if (typeof shading === 'undefined') {
+				shading = this.node.find('.active').data('shading');
+			}
+			
+			this.shadingMode = shading;
+			this.node.find('.btn').removeClass('active');
+			this.buttons[shading].addClass('active');
+			this.editor.menu.uncheck(this.menuNode.find('a'));
+			this.editor.menu.check(this.menuItems[shading]);
 			
 			switch (this.shadingMode) {
 			case 'wire': return this.wire();

@@ -1,6 +1,6 @@
 'use strict';
 
-define(['Dialog'], function (Dialog) {
+define(['Dialog', 'PopupMenu'], function (Dialog, PopupMenu) {
 	function Menu(editor, node) {
 		var menu = this;
 		node = $(node);
@@ -8,44 +8,19 @@ define(['Dialog'], function (Dialog) {
 		this.editor = editor;
 		this.node = node;
 		
-		node.find('a').each(function (index, a) {
+		node.find('a,label').each(function (index, a) {
 			a = $(a);
 			
-			a.click(function (e) {
-				if (a.hasClass('disabled')) {
-					return;
+			editor.createTrigger(a, function (finish, e) {
+				if (!a.hasClass('disabled')) {
+					menu.close();
+					finish();
 				}
-				
-				if (a.data('open')) {
-					Dialog.get(a.data('open')).show();
-				}
-				
-				menu.close();
 			});
 		});
 		
-		this.bind('quit', function () {
-			if (!menu.editor.quit()) {
-				return;
-			}
-			
-			window.close();
-		});
-		
-		this.bind('open', function () {
-			menu.editor.open();
-		});
-		
-		this.bind('view-reset', function () {
-			menu.editor.mode.camera.reset();
-		});
-		
-		this.bind('mode-object', function () { editor.changeMode('object'); });
-		this.bind('mode-figure', function () { editor.changeMode('figure'); });
-		this.bind('mode-sequence', function () { editor.changeMode('sequence'); });
-		
 		this.node.mousemove(function () {
-			$('.popmenu').removeClass('open');
+			PopupMenu.closeAll();
 		});
 	}
 	
