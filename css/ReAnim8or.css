@@ -41,6 +41,9 @@ html, body {
 	padding: 3px;
 	background: #333;
 	z-index: 500;
+	background: linear-gradient(#444, #222);
+	background: -moz-linear-gradient(#444, #222);
+	background: -webkit-linear-gradient(#444, #222);
 }
 
 #menu a,
@@ -76,6 +79,7 @@ html, body {
 	color: #aaa;
 	padding: 2px 5px;
 	cursor: pointer;
+	text-shadow: 0 -1px #000;
 }
 
 #menu > .submenu:hover {
@@ -84,6 +88,7 @@ html, body {
 	background: linear-gradient(#fff, #eee);
 	background: -moz-linear-gradient(#fff, #eee);
 	background: -webkit-linear-gradient(#fff, #eee);
+	text-shadow: none;
 }
 
 .popmenu,
