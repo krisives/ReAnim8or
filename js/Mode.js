@@ -9,6 +9,7 @@ define(['Camera', 'Toolbar', 'Scene', 'Grid', 'Menu'], function (Camera, Toolbar
 		this.scene = new Scene(this);
 		this.camera = new Camera(this);
 		this.toolbar = new Toolbar(editor, 'ui-' + id);
+		this.toolbar.addParent(editor.topbar);
 		this.grid = new Grid(this);
 		this.menuItem = $('#menu-mode-' + id);
 	}

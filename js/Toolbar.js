@@ -11,6 +11,7 @@ define(function () {
 		this.editor = editor;
 		this.tools = {};
 		this.active = null;
+		this.parents = [];
 		
 		editor.toolbar = this;
 		
@@ -138,6 +139,23 @@ define(function () {
 					f();
 				}
 			});
+		},
+		
+		addParent: function (p) {
+			if (!p || !(p instanceof Toolbar)) { return; }
+			this.parents.push(p);
+		},
+		
+		hasActiveParent: function () {
+			var len = this.parents.length;
+			
+			for (var i=0; i < len; i++) {
+				if (this.parents[i].active) {
+					return true;
+				}
+			}
+			
+			return false;
 		}
 	};
 	

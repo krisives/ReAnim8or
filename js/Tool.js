@@ -19,7 +19,7 @@ define(function () {
 		
 		isActive: function () {
 			if (!this.toolbar) { return false; }
-			return this === this.toolbar.active;
+			return (this === this.toolbar.active) && !this.toolbar.hasActiveParent();
 		},
 		
 		createHandler: function (f) {
