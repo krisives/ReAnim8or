@@ -13,7 +13,7 @@ define(function () {
 		this.ambientLight = new THREE.AmbientLight( 0xaaaaaa);
 		this.root.add( this.ambientLight );
 		
-		this.directionalLight = new THREE.DirectionalLight( 0xffffff);
+		this.directionalLight = new THREE.DirectionalLight( 0xcccccc, 0.6667);
 		this.directionalLight.position.set(1, 1, 1);
 		this.root.add( this.directionalLight );
 	}

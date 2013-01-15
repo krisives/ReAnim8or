@@ -12,7 +12,8 @@ function (Mouse, Menu, Toolbar, Project, Dialog, PopupMenu) {
 		viewReset: 'viewReset',
 		changeMode: 'changeMode',
 		changeShading: 'changeShading',
-		changeTool: 'changeTool'
+		changeTool: 'changeTool',
+		openFile: 'openFile'
 	};
 	
 	function Editor(node) {
@@ -28,6 +29,12 @@ function (Mouse, Menu, Toolbar, Project, Dialog, PopupMenu) {
 		this.formats = {};
 		this.modes = {};
 		this.mode = null;
+		this.projector = new THREE.Projector();
+		this.projectVector = new THREE.Vector3();
+		this.raycaster = new THREE.Raycaster(
+			new THREE.Vector3(0, 0, 0),
+			new THREE.Vector3(0, 1, 0)
+		);
 		
 		this.menu = new Menu(this, '#menu');
 		this.topbar = new Toolbar(this, 'topbar');
@@ -342,7 +349,6 @@ function (Mouse, Menu, Toolbar, Project, Dialog, PopupMenu) {
 		},
 		
 		changeTool: function (tool) {
-			console.log("changeTool",tool);
 			if (!this.mode) { return; }
 			if (!this.mode.toolbar) { return; }
 			this.mode.toolbar.changeTool(tool);
@@ -372,6 +378,25 @@ function (Mouse, Menu, Toolbar, Project, Dialog, PopupMenu) {
 			}
 			
 			src.click(handler);
+		},
+		
+		pick: function (v) {
+			if (!this.mode) { return; }
+			var camera = this.mode.camera;
+			
+			this.projectVector.set(
+				Mouse.nx*2 - 1,
+				-Mouse.ny*2 + 1,
+				0.5
+			);
+			
+			this.projector.unprojectVector(this.projectVector, this.mode.camera.entity);
+			
+			this.raycaster.set(camera.rig.position, vector.subSelf( camera.position ).normalize() );
+		},
+		
+		openFile: function (input) {
+			$(input).click();
 		}
 	};
 	
