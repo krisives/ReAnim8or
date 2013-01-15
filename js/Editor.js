@@ -80,6 +80,8 @@ function (Mouse, Menu, Toolbar, Project, Dialog, PopupMenu) {
 		
 		// Start with a default empty project
 		this.addProject(new Project(this));
+		
+		this.viewReset();
 	}
 	
 	Editor.prototype = {

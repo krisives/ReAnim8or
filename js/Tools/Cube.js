@@ -7,7 +7,7 @@ define(['Tool', 'Mouse'], function (Tool, Mouse) {
 		this.button = toolbar.node.find('.tool-cube');
 		this.cube = null;
 		this.scalingVector = new THREE.Vector3(1, 1, 1);
-		this.scalingMatrix = new THREE.Matrix4();
+		this.rotatedScalingVector = new THREE.Vector3(1, 1, 1);
 		
 		Mouse.on.down(this.createHandler(function (e) {
 			tool.startCube();
@@ -39,15 +39,24 @@ define(['Tool', 'Mouse'], function (Tool, Mouse) {
 		},
 		
 		scaleCube: function () {
-			var x, z;
+			var x, y;
 			if (!this.cube) { return; }
 			
-			this.scalingVector.z = Math.abs(x = this.scalingVector.z + Mouse.delta.x * 0.05);
-			this.scalingVector.x = Math.abs(z = this.scalingVector.x + Mouse.delta.y * 0.05);
-			this.scalingVector.y = Math.sqrt(x*x + z*z);
+			this.scalingVector.x = (x = this.scalingVector.x + Mouse.delta.x / this.editor.width * 25);
+			this.scalingVector.y = (y = this.scalingVector.y + Mouse.delta.y / this.editor.height * 25);
+			this.scalingVector.z = Math.sqrt(x*x + y*y);
 			
-			console.log(this.scalingVector);
-			this.cube.scale.copy(this.scalingVector);
+			this.rotatedScalingVector.copy(this.scalingVector);
+			
+			var q = this.editor.mode.camera.entity.quaternion.clone();
+			
+			q.multiplyVector3(this.rotatedScalingVector);
+			
+			this.rotatedScalingVector.x = Math.abs(this.rotatedScalingVector.x);
+			this.rotatedScalingVector.y = Math.abs(this.rotatedScalingVector.y);
+			this.rotatedScalingVector.z = Math.abs(this.rotatedScalingVector.z);
+			
+			this.cube.scale.copy(this.rotatedScalingVector);
 			this.cube.updateMatrix();
 		}
 	});
