@@ -1,10 +1,21 @@
 define(function () {
+	var win = $(window);
+	var width = win.width();
+	var height = win.height();
+	
+	win.resize(function () {
+		width = win.width();
+		height = win.height();
+	});
+	
 	function Mouse() {
 		this.x = 0;
 		this.y = 0;
+		this.nx = 0;
+		this.ny = 0;
 		
-		this.last = {x: 0, y: 0};
-		this.delta = {x: 0, y: 0};
+		this.last = {x: 0, y: 0, nx: 0, ny: 0};
+		this.delta = {x: 0, y: 0, nx: 0, ny: 0};
 		
 		// Map of buttons that are current pressed
 		this.down = {};
@@ -27,12 +38,18 @@ define(function () {
 		move: function (x, y) {
 			this.last.x = this.x;
 			this.last.y = this.y;
+			this.last.nx = this.nx;
+			this.last.ny = this.ny;
 			
 			this.x = ~~x;
 			this.y = ~~y;
+			this.nx = x / width;
+			this.ny = y / height;
 			
 			this.delta.x = this.x - this.last.x;
 			this.delta.y = this.y - this.last.y;
+			this.delta.nx = this.delta.x / width;
+			this.delta.ny = this.delta.y / height;
 		},
 		
 		on: {
