@@ -11,7 +11,8 @@ function (Mouse, Menu, Toolbar, Project, Dialog, PopupMenu) {
 		about: 'about',
 		viewReset: 'viewReset',
 		changeMode: 'changeMode',
-		changeShading: 'changeShading'
+		changeShading: 'changeShading',
+		changeTool: 'changeTool'
 	};
 	
 	function Editor(node) {
@@ -336,6 +337,13 @@ function (Mouse, Menu, Toolbar, Project, Dialog, PopupMenu) {
 			var tool = this.topbar.findTool('shading');
 			if (!tool) { return; }
 			tool.setShadingMode(shading);
+		},
+		
+		changeTool: function (tool) {
+			console.log("changeTool",tool);
+			if (!this.mode) { return; }
+			if (!this.mode.toolbar) { return; }
+			this.mode.toolbar.changeTool(tool);
 		},
 		
 		createTrigger: function (src, f) {

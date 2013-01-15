@@ -9,6 +9,13 @@ define(function () {
 		this.root = new THREE.Scene();
 		this.world = new THREE.Object3D();
 		this.ui = new THREE.Object3D();
+		
+		this.ambientLight = new THREE.AmbientLight( 0xaaaaaa);
+		this.root.add( this.ambientLight );
+		
+		this.directionalLight = new THREE.DirectionalLight( 0xffffff);
+		this.directionalLight.position.set(1, 1, 1);
+		this.root.add( this.directionalLight );
 	}
 	
 	Scene.prototype = {
