@@ -103,7 +103,8 @@ html, body {
 	text-shadow: 0 1px #fff;
 }
 
-#menu > .submenu > .more > * {
+#menu > .submenu > .more > *,
+#menu > .submenu > .more .group > * {
 	display: block;
 }
 
@@ -185,35 +186,6 @@ html, body {
 	margin: 2px 3px;
 	display: block;
 }
-
-
-
-.icon-view-rotate,
-.icon-view-full,
-.icon-view-wire,
-.icon-view-flat,
-.icon-arrow,
-.icon-vertex,
-.icon-select-drag,
-.icon-make-cube,
-.icon-make-sphere {
-	background-position: center center;
-	background-repeat: no-repeat;
-	width: 16px;
-	height: 16px;
-	display: inline-block !important;
-	margin-top: 3px !important;
-}
-
-.icon-arrow { background-image: url(../icons/arrow.png) !important; }
-.icon-vertex { background-image: url(../icons/vertex.png) !important; }
-.icon-view-rotate { background-image: url(../icons/view-rotate.png) !important; }
-.icon-view-wire { background-image: url(../icons/view-wire.png) !important; }
-.icon-view-flat { background-image: url(../icons/view-flat.png) !important; }
-.icon-view-full { background-image: url(../icons/view-full.png) !important; }
-.icon-select-drag { background-image: url(../icons/drag.png) !important; }
-.icon-make-cube { background-image: url(../icons/object-make-cube.png) !important; }
-.icon-make-sphere { background-image: url(../icons/object-make-sphere.png) !important; }
 
 #ui {
 	position: fixed;
