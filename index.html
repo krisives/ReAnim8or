@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-	<script>window.ReAnim8or = { VERSION: '0.24' };</script>
+	<script>window.ReAnim8or = { VERSION: '0.25' };</script>
 	<title>ReAnim8or</title>
 	<link rel="shortcut icon" href="ReAnim8or.ico">
 	<link rel="icon" href="ReAnim8or.ico">
@@ -9,6 +9,7 @@
 	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="css/ReAnim8or.css">
+	<link rel="stylesheet" type="text/css" href="css/icons.css">
 	
 	<script src="three.min.js"></script>
 	<script src="require.js"></script>
@@ -37,7 +38,7 @@
 			<a><i class="icon-save"></i> Save</a>
 			<a><i class="icon-save"></i> Save As...</a>
 			<div class="separator"></div>
-			<a id="menu-quit"><i class="icon-off"></i> Quit</a>
+			<a data-action="quit"><i class="icon-off"></i> Quit</a>
 		</div>
 	</div>
 	
@@ -45,10 +46,10 @@
 		<span>Edit</span>
 		
 		<div class="more">
-			<a><i class="icon-copy"></i> Copy</a>
-			<a><i class="icon-paste"></i> Paste</a>
+			<a class="disabled"><i class="icon-copy"></i> Copy</a>
+			<a class="disabled"><i class="icon-paste"></i> Paste</a>
 			<div class="separator"></div>
-			<a><i class="icon-cut"></i> Cut</a>
+			<a class="disabled"><i class="icon-cut"></i> Cut</a>
 		</div>
 	</div>
 	
@@ -56,17 +57,17 @@
 		<span>Mode</span>
 		
 		<div class="more">
-			<a id="menu-mode-object">
+			<a id="menu-mode-object" data-action="changeMode" data-args="object">
 				<i class="icon-check"></i>
 				Object
 			</a>
 			
-			<a id="menu-mode-figure">
+			<a id="menu-mode-figure" data-action="changeMode" data-args="figure">
 				<i class="icon-check-empty"></i>
 				Figure
 			</a>
 			
-			<a id="menu-mode-sequence">
+			<a id="menu-mode-sequence" data-action="changeMode" data-args="sequence">
 				<i class="icon-check-empty"></i>
 				Sequence
 			</a>
@@ -93,12 +94,24 @@
 		<span>View</span>
 		
 		<div class="more">
-			<a id="menu-view-reset"><i class="icon-refresh"></i> Reset</a>
+			<a data-action="viewReset"><i class="icon-refresh"></i> Reset</a>
 			<div class="separator"></div>
 			
-			<a><i class="icon-check"></i> Wire</a>
-			<a><i class="icon-check-empty"></i> Flat</a>
-			<a><i class="icon-check-empty"></i> Smooth</a>
+			<div class="group menu-view-shading">
+			<a class="menu-view-wire" data-action="changeShading" data-args="wire">
+				<i class="icon-check"></i>
+				Wire
+			</a>
+			<a class="menu-view-flat" data-action="changeShading" data-args="flat">
+				<i class="icon-check-empty"></i>
+				Flat
+			</a>
+			<a class="menu-view-smooth" data-action="changeShading" data-args="smooth">
+				<i class="icon-check-empty"></i>
+				Smooth
+			</a>
+			</div>
+			
 			<div class="separator"></div>
 			<a><i class="icon-check"></i> Grid</a>
 		</div>
@@ -152,7 +165,7 @@
 			</a>
 			
 			<div class="separator"></div>
-			<a data-open="#about">
+			<a data-action="about">
 				<i class="icon-question-sign"></i> 
 				About
 			</a>
@@ -215,12 +228,21 @@
 	
 	<div class="" data-toggle="buttons-radio">
 	<div class="separator"></div>
-	<div class="btn-group" >
+	<div class="btn-group">
 		<a class="btn btn-mini active tool-select tip" title="Select by Pointing" data-placement="right">
 			<i class="icon-arrow"></i>
 		</a>
 		<a class="btn btn-mini tool-select-multi tip" title="Select by Dragging" data-placement="right">
 			<i class="icon-select-drag"></i>
+		</a>
+	</div>
+	<div></div>
+	<div class="btn-group">
+		<a class="btn btn-mini tip" title="Move Selected Objects" data-placement="right">
+			<i class="icon-object-move"></i>
+		</a>
+		<a class="btn btn-mini tip" title="Rotate Selected Objects" data-placement="right">
+			<i class="icon-object-rotate"></i>
 		</a>
 	</div>
 	
@@ -241,8 +263,8 @@
 <div id="editor"></div>
 <div id="ui">
 <div id="ui-hidden">
-<input id="project-open-input" type="file" />
-<input id="object-import-input" type="file" />
+<input id="project-open-input" type="file" data-action="openProject" data-args="$"/>
+<input id="object-import-input" type="file" data-action="importObject" data-args="$"/>
 </div>
 <div id="hud">
 	<div id="hud-view-menu" class="popmenu">
