@@ -338,4 +338,13 @@ input {
 	left: 0; right: 0; top: 0; bottom: 0;
 }
 
+.btn-group.no-bottom,
+.btn-group.no-bottom * {
+	border-bottom: none !important;
+}
+
+.btn-group.no-top,
+.btn-group.no-top * {
+	border-top: none !important;
+}
 
