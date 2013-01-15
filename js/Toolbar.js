@@ -95,6 +95,10 @@ define(function () {
 				}
 			}
 			
+			if (tool && tool.passive) {
+				tool = null;
+			}
+			
 			this.active = tool;
 			
 			if (!this.active) {

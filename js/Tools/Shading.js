@@ -6,6 +6,7 @@ define(['Tool'], function (Tool) {
 		
 		Tool.construct(this, 'shading', editor, toolbar);
 		
+		this.passive = true;
 		this.node = toolbar.node.find('.tool-shading');
 		
 		this.buttons = {

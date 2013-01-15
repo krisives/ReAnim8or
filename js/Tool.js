@@ -9,6 +9,7 @@ define(function () {
 		this.id = id;
 		this.editor = editor;
 		this.toolbar = toolbar;
+		this.passive = this.passive || false;
 	}
 	
 	function optional() { }
@@ -18,6 +19,7 @@ define(function () {
 		deactivate: optional,
 		
 		isActive: function () {
+			if (this.passive) { return false; }
 			if (!this.toolbar) { return false; }
 			return (this === this.toolbar.active) && !this.toolbar.hasActiveParent();
 		},
