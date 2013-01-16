@@ -4,14 +4,11 @@ define(['Mouse'], function (Mouse) {
 	function PopupMenu(editor, node) {
 		var popmenu = this;
 		node = $(node);
+		if (!node) { throw "Missing popup node"; }
 		
 		this.editor = editor;
 		this.node = node;
 		this.node.data('PopupMenu', this);
-		
-		this.node.click(function () {
-			popmenu.open();
-		});
 	}
 	
 	PopupMenu.prototype = {
@@ -39,7 +36,7 @@ define(['Mouse'], function (Mouse) {
 		
 		PopupMenu.active = null;
 	};
-	/*
+	
 	function cancel(e) {
 		var target = $(e.target);
 		
@@ -64,6 +61,6 @@ define(['Mouse'], function (Mouse) {
 	
 	Mouse.on.down(cancel);
 	Mouse.on.up(cancel);
-	*/
+	
 	return PopupMenu;
 });

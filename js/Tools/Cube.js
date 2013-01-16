@@ -44,7 +44,7 @@ define(['Tool', 'Mouse'], function (Tool, Mouse) {
 			
 			this.scalingVector.x = (x = this.scalingVector.x + Mouse.delta.nx * 25);
 			this.scalingVector.y = (y = this.scalingVector.y + Mouse.delta.ny * 25);
-			this.scalingVector.z = Math.sqrt(x*x + y*y);
+			this.scalingVector.z =  Math.sqrt(x*y);
 			
 			this.rotatedScalingVector.copy(this.scalingVector);
 			

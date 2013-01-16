@@ -2,19 +2,21 @@
 
 define(['Mouse', 'Menu', 'Toolbar', 'Project', 'Dialog', 'PopupMenu'],
 function (Mouse, Menu, Toolbar, Project, Dialog, PopupMenu) {
+	var numeric = /^[0-9]+$/;
 	var defaultFormats = ['Formats/An8'];
 	var defaultModes = ['Modes/Object', 'Modes/Figure', 'Modes/Sequence'];
 	var defaultTools = ['Tools/Shading', 'Tools/View'];
-	var defaultActions = {
-		openProject: 'openProject',
-		quit: 'quit',
-		about: 'about',
-		viewReset: 'viewReset',
-		changeMode: 'changeMode',
-		changeShading: 'changeShading',
-		changeTool: 'changeTool',
-		openFile: 'openFile'
-	};
+	var defaultActions = [
+		'openProject',
+		'quit',
+		'about',
+		'viewReset',
+		'changeMode',
+		'changeShading',
+		'changeTool',
+		'openFile',
+		'popupMenu'
+	];
 	
 	function Editor(node) {
 		var editor = this;
@@ -39,9 +41,9 @@ function (Mouse, Menu, Toolbar, Project, Dialog, PopupMenu) {
 		this.menu = new Menu(this, '#menu');
 		this.topbar = new Toolbar(this, 'topbar');
 		
-		//$('#ui .popmenu').each(function (index, popmenu) {
-		//	new PopupMenu(editor, popmenu);
-		//});
+		$('#ui .popmenu').each(function (index, popmenu) {
+			new PopupMenu(editor, popmenu);
+		});
 		
 		$('#ui *[data-action]').each(function (index, src) {
 			editor.createTrigger(src);
@@ -56,9 +58,7 @@ function (Mouse, Menu, Toolbar, Project, Dialog, PopupMenu) {
 		
 		this.resize();
 		
-		$.each(defaultActions, function (key, value) {
-			editor.addAction(key, value);
-		});
+		this.addActions(defaultActions);
 		
 		requirejs(defaultFormats, function () {
 			var loaded = arguments;
@@ -105,10 +105,15 @@ function (Mouse, Menu, Toolbar, Project, Dialog, PopupMenu) {
 				return x !== null && x.trim().length > 0;
 			});
 			
-			if (action in this.actions) {
+			if (!(action in this.actions)) {
+				this.error("Cannot find action " + action);
+			}
+			
+			try {
 				f = this.actions[action];
-				
 				f.apply(this, args);
+			} catch (e) {
+				this.error(e);
 			}
 			
 			if (this.project) {
@@ -131,6 +136,24 @@ function (Mouse, Menu, Toolbar, Project, Dialog, PopupMenu) {
 			}
 			
 			this.actions[action] = f;
+		},
+		
+		addActions: function (actions) {
+			var editor = this;
+			
+			$.each(actions, function (key, value) {
+				if (value === null || value === '') {
+					return;
+				}
+				
+				if ($.isPlainObject(value) || $.isArray(value)) {
+					editor.addActions(value);
+				} else if (String(key).match(numeric)) {
+					editor.addAction(value, value);
+				} else {
+					editor.addAction(key, value);
+				}
+			});
 		},
 		
 		error: function (e) {
@@ -397,6 +420,20 @@ function (Mouse, Menu, Toolbar, Project, Dialog, PopupMenu) {
 		
 		openFile: function (input) {
 			$(input).click();
+		},
+		
+		popupMenu: function (menu) {
+			if (!(menu instanceof PopupMenu)) {
+				menu = $(menu);
+				if (menu.data('PopupMenu')) {
+					menu = menu.data('PopupMenu');
+				} else {
+					menu = new PopupMenu(this, menu);
+				}
+			}
+			
+			if (!menu) { return; }
+			menu.open();
 		}
 	};
 	
