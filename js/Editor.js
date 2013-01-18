@@ -15,7 +15,8 @@ function (Mouse, Menu, Toolbar, Project, Dialog, PopupMenu) {
 		'changeShading',
 		'changeTool',
 		'openFile',
-		'popupMenu'
+		'popupMenu',
+		'importObject'
 	];
 	
 	function Editor(node) {
@@ -106,7 +107,7 @@ function (Mouse, Menu, Toolbar, Project, Dialog, PopupMenu) {
 			});
 			
 			if (!(action in this.actions)) {
-				this.error("Cannot find action " + action);
+				return this.error("Cannot find action " + String(action));
 			}
 			
 			try {
@@ -114,6 +115,7 @@ function (Mouse, Menu, Toolbar, Project, Dialog, PopupMenu) {
 				f.apply(this, args);
 			} catch (e) {
 				this.error(e);
+				return;
 			}
 			
 			if (this.project) {
@@ -157,19 +159,17 @@ function (Mouse, Menu, Toolbar, Project, Dialog, PopupMenu) {
 		},
 		
 		error: function (e) {
+			e = e || "Unknown Error";
+			
 			if (!window.console) {
-				alert(arguments.join(' '));
+				alert("ReAnim8or Error: \n\n" + String(e));
 				return;
 			}
 			
 			if (console.error) {
-				console.error(arguments);
+				console.error("ReAnim8or Error:", e.stack || e);
 			} else {
-				console.log("Error", arguments);
-			}
-			
-			if (console.trace) {
-				console.trace(e);
+				console.log("ReAnim8or Error:", e.stack || e);
 			}
 		},
 		
@@ -345,8 +345,17 @@ function (Mouse, Menu, Toolbar, Project, Dialog, PopupMenu) {
 			console.log("TODO");
 		},
 		
-		importObject: function () {
-			console.log("TODO");
+		// TODO move to Modes/Object
+		importObject: function (input) {
+			var editor = this;
+			input = $(input);
+			
+			$.each(input.prop('files'), function (index, file) {
+				editor.modes.object.importObject(file);
+			});
+			
+			// Clear the file list
+			input.val('');
 		},
 		
 		addProject: function (p) {
@@ -419,7 +428,10 @@ function (Mouse, Menu, Toolbar, Project, Dialog, PopupMenu) {
 		},
 		
 		openFile: function (input) {
-			$(input).click();
+			input = $(input);
+			if (input.size() <= 0) { throw "Cannot find <input> element for file"; }
+			
+			input.click();
 		},
 		
 		popupMenu: function (menu) {
