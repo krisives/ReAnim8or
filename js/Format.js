@@ -1,8 +1,6 @@
 define(function () {
-	function Format(id) {
-		if (!id) { throw "Must pass a simple string id for this format"; }
+	function Format(data) {
 		
-		this.id = id;
 	}
 	
 	function missing(msg) {
@@ -16,6 +14,15 @@ define(function () {
 		canRead: missing("Provide canRead() return true if this format reads it"),
 		read: missing("Provide read() to read"),
 		write: missing("Provide write() to write")
+	};
+	
+	Format.extend = function (o) {
+		return $.extend({}, Format.prototype, o);
+	};
+	
+	Format.construct = function (it, data) {
+		Format.call(it, data);
+		return it;
 	};
 	
 	return Format;

@@ -1,21 +1,44 @@
+'use strict';
+
 define(['Format'], function (Format) {
 	var patterns = {
-		digit: /[0-9]/,
-		letter: /a-z/i,
-		identifier: /[a-z_]+[a-z_0-9]+/i,
-		space: /\s+/,
-		stop: /[\s\}\{\)\(]/
+		digit: /^[0-9]/,
+		letter: /^[a-z]/i,
+		identifier: /^[a-z_]+[a-z_0-9]+/i,
+		space: /^\s+/,
+		stop: /^[\s\}\{\)\(]/,
+		number: /^[\-\+]?[0-9]+(\.[0-9]+)?/
 	};
+	
+	function quote(str) { return '"' + str + '"'; }
 	
 	function Context(data) {
 		this.data = data;
 		this.len = data.length;
 		this.pos = 0;
+		this.lineNumber = 1;
+		this.columnNumber = 1;
 	}
 	
 	Context.prototype = {
+		error: function () {
+			var strs = [], i, len = arguments.length;
+			
+			for (i=0; i < len; i++) {
+				strs.push(String(arguments[i]));
+			}
+			
+			if (strs.length <= 0) {
+				strs.push("Unknown Error");
+			}
+			
+			return strs.join(' ') + " (line " + String(this.lineNumber) + ")";
+		},
+		
 		reset: function () {
 			this.pos = 0;
+			this.lineNumber = 1;
+			this.columnNumber = 1;
 		},
 		
 		remaining: function () {
@@ -24,10 +47,34 @@ define(['Format'], function (Format) {
 		
 		read: function () {
 			if (this.pos >= this.len) {
-				throw "Unexpected end of data";
+				throw this.error("Unexpected end of data");
 			}
 			
-			return this.data[this.pos++];
+			var c = this.data[this.pos++];
+			
+			if (c === "\n") {
+				this.lineNumber++;
+				this.columnNumber = 1;
+			} else {
+				this.columnNumber++;
+			}
+			
+			return c;
+		},
+		
+		readPattern: function (pattern) {
+			if (!(pattern instanceof RegExp)) { throw this.error("Must pass a RegExp object"); }
+			var sub = this.data.substring(this.pos);
+			var result = sub.match(pattern);
+			
+			if (result === null || result[0] === null) {
+				throw this.error("Expected", quote(pattern), "but encountered", quote(this.read()));
+			}
+			
+			result = result[0];
+			
+			this.pos += result.length;
+			return result;
 		},
 		
 		expect: function (str) {
@@ -41,7 +88,11 @@ define(['Format'], function (Format) {
 					continue;
 				}
 				
-				throw ["Expected '", str, "'"].join();
+				break;
+			}
+			
+			if (pos < len) {
+				throw this.error("Expected ", quote(str), " not ", quote(c));
 			}
 		},
 		
@@ -58,16 +109,20 @@ define(['Format'], function (Format) {
 				}
 			}
 			
-			throw ["Expected '", str, "'"].join('');
+			if (pos < len) {
+				throw this.error("Expected ", quote(str), " not '", quote(c), "'");
+			}
 		},
 		
 		skip: function () {
 			var c;
 			
-			while (this.pos <= this.len) {
+			while (this.remaining()) {
 				c = this.data[this.pos];
 				
-				if (c === ' ' || c === "\n" || c === "\r" || c === "\t" || c.matches(patterns.space)) {
+				if (c === "\n" || c === ' ' || c === "\r" || c === "\t" || c.match(patterns.space)) {
+					this.lineNumber++;
+					this.columnNumber = 1;
 					this.pos++;
 					continue;
 				}
@@ -81,37 +136,15 @@ define(['Format'], function (Format) {
 					}
 				}
 				
-				break;
+				return c;
 			}
 			
-			return c;
+			return null;
 		},
 		
-		comment: function () {
-			this.expect("/*");
-			this.until("*/");
-		},
-		
-		number: function () {
-			var c, start = this.pos;
-			
-			while (this.remaining()) {
-				c = this.read();
-				
-				if (c.matches(patterns.digit)) {
-					this.pos++;
-					continue;
-				}
-				
-				if (c.matches(patterns.stop)) {
-					return this.data.substring(start, this.pos);
-				}
-				
-				throw ["Unexpected '", c, "' while parsing integer"].join('');
-			}
-			
-			throw "Expecting number before end of data";
-		},
+		id: function () { return this.readPattern(patterns.identifier); },
+		comment: function () { this.expect("/*"); this.until("*/"); },
+		number: function () { return Number(this.readPattern(patterns.number)); },
 		
 		string: function () {
 			var c, escaped = false, start = this.pos;
@@ -127,68 +160,92 @@ define(['Format'], function (Format) {
 				escaped = (c === '\\');
 			}
 			
-			throw "Expected end fo string";
+			throw this.error("Expected end of string");
 		},
 		
-		id: function () {
+		block: function (parent, id) {
+			var c, id, value, block = {};
 			
+			if (typeof id === 'undefined') {
+				id = this.id();
+			}
+			
+			this.skip();
+			this.expect("{");
+			if (parent) { parent[id] = block; }
+			this.list(block);
+			this.expect("}");
+			return block;
 		},
 		
-		block: function (parent) {
-			var c, id, value, node;
-			parent = parent || {};
-			
-			id = this.id();
-			parent[id] = (node = {
-				values: []
-			});
-			
-			expect("{");
+		list: function (list, exit) {
+			var c, id, k = 0;
+			list = list || {};
+			exit = exit || '}';
 			
 			while (this.remaining()) {
 				c = this.skip();
 				
-				if (c === undefined) {
-					throw "Expecting value or block before end of data";
+				if (c === undefined || c === null || c === '') {
+					break;
 				}
 				
-				if (c === '}') {
+				if (c === exit) {
 					break;
 				}
 				
 				if (c === '"') {
-					node.values.push(this.string());
+					list[k++] = (this.string());
 					continue;
 				}
 				
-				if (c.matches(digit)) {
-					nodes.values.push(this.number());
+				if (c.match(patterns.digit) || c === '+' || c === '-') {
+					list[k++] = (this.number());
 					continue;
 				}
 				
 				if (c === '(') {
-					nodes.values.push(this.tuple());
+					list[k++] = (this.tuple());
 					continue;
 				}
 				
-				if (c.matches(letter)) {
-					this.block(node);
+				if (c.match(patterns.letter)) {
+					id = this.id();
+					c = this.skip();
+					
+					if (c === '{') {
+						this.block(list, id);
+					} else {
+						list[k++] = (id);
+					}
+					
 					continue;
 				}
 				
-				throw ["Unexpected '", c, "' during block"].join('');
+				throw this.error("Unexpected ", quote(c), " during list");
 			}
 			
-			expect("}");
+			return list;
+		},
+		
+		tuple: function () {
+			var list;
+			
+			this.expect("(");
+			list = this.list([], ')');
+			this.expect(")");
+			
+			return list;
 		}
 	};
 	
 	function Loader(data) {
-		Format.call(this);
+		Format.construct(this, data);
 		
 		var context = new Context(data);
-		var root = context.block();
+		var root;
 		
+		root = context.list();
 		console.log(root);
 	}
 	
