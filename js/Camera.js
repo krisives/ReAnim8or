@@ -78,6 +78,8 @@ define(function () {
 	Camera.prototype = {
 		reset: function () {
 			this.yaw = this.pitch = this.roll = 0.0;
+			this.entity.position.set(0, 0, 0);
+			this.rig.position.set(0, 0, 0);
 		},
 		
 		turn: function (pitch, yaw, roll) {
