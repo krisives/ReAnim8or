@@ -405,7 +405,7 @@ function (Mouse, Menu, Toolbar, Project, Dialog, PopupMenu) {
 			};
 			
 			if (src.is('input[type=file]')) {
-				src.live('change', handler);
+				src.on('change', handler);
 				return;
 			}
 			
