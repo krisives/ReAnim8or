@@ -34,7 +34,9 @@ define(['Mode', 'Formats/An8'], function (Mode, An8) {
 				return;
 			}
 			
-			format = new An8(data);
+			format = new An8(editor);
+			
+			format.read(data);
 		}
 	});
 	

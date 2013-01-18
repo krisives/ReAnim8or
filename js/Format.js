@@ -1,6 +1,6 @@
 define(function () {
-	function Format(data) {
-		
+	function Format(editor) {
+		this.editor = editor;
 	}
 	
 	function missing(msg) {
@@ -20,8 +20,8 @@ define(function () {
 		return $.extend({}, Format.prototype, o);
 	};
 	
-	Format.construct = function (it, data) {
-		Format.call(it, data);
+	Format.construct = function (it, editor) {
+		Format.call(it, editor);
 		return it;
 	};
 	

@@ -175,6 +175,7 @@ define(['Format'], function (Format) {
 			if (parent) { parent[id] = block; }
 			this.list(block);
 			this.expect("}");
+			
 			return block;
 		},
 		
@@ -239,15 +240,19 @@ define(['Format'], function (Format) {
 		}
 	};
 	
-	function Loader(data) {
-		Format.construct(this, data);
-		
-		var context = new Context(data);
-		var root;
-		
-		root = context.list();
-		console.log(root);
+	function Loader(editor) {
+		Format.construct(this, editor);
 	}
+	
+	Loader.prototype = Format.extend({
+		read: function (data) {
+			var context = new Context(data);
+			var root;
+		
+			root = context.list();
+			console.log(root);
+		}
+	});
 	
 	return Loader;
 });
