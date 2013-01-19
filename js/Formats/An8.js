@@ -1,6 +1,10 @@
 'use strict';
 
 define(['Format'], function (Format) {
+	/** This parser is a combination of simple finite state machine (FSM)
+	*   and regular expressions. The An8 format is very simple and is
+	*   somewhat of a simplified C-like dialect.    **/
+	
 	var patterns = {
 		digit: /^[0-9]/,
 		letter: /^[a-z]/i,
@@ -12,7 +16,7 @@ define(['Format'], function (Format) {
 	
 	function quote(str) { return '"' + str + '"'; }
 	
-	function Context(data) {
+	function Parser(data) {
 		this.data = data;
 		this.len = data.length;
 		this.pos = 0;
@@ -20,7 +24,7 @@ define(['Format'], function (Format) {
 		this.columnNumber = 1;
 	}
 	
-	Context.prototype = {
+	Parser.prototype = {
 		error: function () {
 			var strs = [], i, len = arguments.length;
 			
@@ -163,26 +167,54 @@ define(['Format'], function (Format) {
 			throw this.error("Expected end of string");
 		},
 		
-		block: function (parent, id) {
+		block: function (id, unenclosed) {
 			var c, id, value, block = {};
+			var index = 0;
 			
 			if (typeof id === 'undefined') {
 				id = this.id();
 			}
 			
 			this.skip();
-			this.expect("{");
-			if (parent) { parent[id] = block; }
-			this.list(block);
-			this.expect("}");
+			if (!unenclosed) { this.expect("{"); }
+			
+			this.list('}', function (x, key) {
+				if (key) {
+					if (key in block) {
+						if ($.isArray(block[key])) {
+							block[key].push(x);
+						} else {
+							block[key] = [block[key], x];
+						}
+					} else {
+						block[key] = x;
+					}
+				} else {
+					block[index++] = x;
+				}
+			});
+			
+			if (!unenclosed) { this.expect("}"); }
 			
 			return block;
 		},
 		
-		list: function (list, exit) {
+		tuple: function () {
+			var list = [];
+			
+			this.expect("(");
+			
+			this.list(')', function (x) {
+				list.push(x);
+			});
+			
+			this.expect(")");
+			
+			return list;
+		},
+		
+		list: function (exit, f) {
 			var c, id, k = 0;
-			list = list || {};
-			exit = exit || '}';
 			
 			while (this.remaining()) {
 				c = this.skip();
@@ -196,17 +228,17 @@ define(['Format'], function (Format) {
 				}
 				
 				if (c === '"') {
-					list[k++] = (this.string());
+					f(this.string());
 					continue;
 				}
 				
 				if (c.match(patterns.digit) || c === '+' || c === '-') {
-					list[k++] = (this.number());
+					f(this.number());
 					continue;
 				}
 				
 				if (c === '(') {
-					list[k++] = (this.tuple());
+					f(this.tuple());
 					continue;
 				}
 				
@@ -215,9 +247,9 @@ define(['Format'], function (Format) {
 					c = this.skip();
 					
 					if (c === '{') {
-						this.block(list, id);
+						f(this.block(id), id);
 					} else {
-						list[k++] = (id);
+						f(id);
 					}
 					
 					continue;
@@ -225,18 +257,6 @@ define(['Format'], function (Format) {
 				
 				throw this.error("Unexpected ", quote(c), " during list");
 			}
-			
-			return list;
-		},
-		
-		tuple: function () {
-			var list;
-			
-			this.expect("(");
-			list = this.list([], ')');
-			this.expect(")");
-			
-			return list;
 		}
 	};
 	
@@ -246,11 +266,40 @@ define(['Format'], function (Format) {
 	
 	Loader.prototype = Format.extend({
 		read: function (data) {
-			var context = new Context(data);
-			var root;
+			var parser = new Parser(data);
+			var root, node;
+			var i, len;
+			var k;
+			
+			root = parser.block('', true);
+			
+			var forChunk = function (x, f) {
+				if (typeof x === 'undefined' || x === null) {
+					return;
+				}
+				
+				if (!$.isArray(x)) {
+					f(x);
+					return;
+				}
+				
+				var len = x.length;
+				
+				for (i=0; i < len; i++) {
+					f(x[i]);
+				}
+			};
+			
+			forChunk(root.header, this.readHeader);
+			forChunk(root.object, this.readObject);
+		},
 		
-			root = context.list();
-			console.log(root);
+		readHeader: function (chunk) {
+			
+		},
+		
+		readObject: function (chunk) {
+			console.log("readObject", chunk);
 		}
 	});
 	
