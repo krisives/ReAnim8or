@@ -264,8 +264,31 @@ define(['Format'], function (Format) {
 		Format.construct(this, editor);
 	}
 	
+	function forChunk(x, f) {
+		if (typeof x === 'undefined' || x === null) {
+			return;
+		}
+		
+		if (!$.isArray(x)) {
+			f(x);
+			return;
+		}
+		
+		var i, len = x.length;
+		
+		for (i=0; i < len; i++) {
+			f(x[i]);
+		}
+	}
+	
+	var handlers = {
+		header: 'readHeader',
+		object: 'readObject'
+	};
+	
 	Loader.prototype = Format.extend({
 		read: function (data) {
+			var loader = this;
 			var parser = new Parser(data);
 			var root, node;
 			var i, len;
@@ -273,25 +296,9 @@ define(['Format'], function (Format) {
 			
 			root = parser.block('', true);
 			
-			var forChunk = function (x, f) {
-				if (typeof x === 'undefined' || x === null) {
-					return;
-				}
-				
-				if (!$.isArray(x)) {
-					f(x);
-					return;
-				}
-				
-				var len = x.length;
-				
-				for (i=0; i < len; i++) {
-					f(x[i]);
-				}
-			};
-			
-			forChunk(root.header, this.readHeader);
-			forChunk(root.object, this.readObject);
+			$.each(handlers, function (key, func) {
+				forChunk(root[key], function (chunk) { loader[func](chunk); });
+			});
 		},
 		
 		readHeader: function (chunk) {
@@ -299,7 +306,22 @@ define(['Format'], function (Format) {
 		},
 		
 		readObject: function (chunk) {
-			console.log("readObject", chunk);
+			var loader = this;
+			console.log(loader);
+			var obj = {
+				entity: new THREE.Object3D(),
+				chunk: chunk
+			};
+			
+			forChunk(chunk.mesh, function (mesh) {
+				loader.readObjectMesh(obj, mesh);
+			});
+			
+			return obj;
+		},
+		
+		readObjectMesh: function (obj, mesh) {
+			console.log("mesh", mesh);
 		}
 	});
 	
