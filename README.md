@@ -1,3 +1,5 @@
+![Screenshot](http://i.imgur.com/0n49Ya0.jpg)
+
 ## About ReAnim8or
 A project I started when I was on vacation. The goal is to re-create some of the simple
 editing capabilities of [Anim8or](http://anim8or.com/main/index.html). Steve, sadly,
