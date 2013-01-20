@@ -4,7 +4,7 @@ define(function () {
 	function Grid(view, unit, size) {
 		if (!view) { throw "Must pass a view"; }
 		
-		unit = unit || 1.0;
+		unit = unit || 10.0;
 		size = size || 32;
 		
 		this.view = view;

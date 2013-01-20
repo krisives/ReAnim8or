@@ -262,6 +262,10 @@ define(['Format'], function (Format) {
 	
 	function Loader(editor) {
 		Format.construct(this, editor);
+		
+		this.objects = [];
+		this.figures = [];
+		this.sequences = [];
 	}
 	
 	function forChunk(x, f) {
@@ -307,21 +311,60 @@ define(['Format'], function (Format) {
 		
 		readObject: function (chunk) {
 			var loader = this;
-			console.log(loader);
+			
 			var obj = {
 				entity: new THREE.Object3D(),
 				chunk: chunk
 			};
 			
 			forChunk(chunk.mesh, function (mesh) {
-				loader.readObjectMesh(obj, mesh);
+				loader.readMesh(obj, mesh);
 			});
 			
-			return obj;
+			this.objects.push(obj);
 		},
 		
-		readObjectMesh: function (obj, mesh) {
-			console.log("mesh", mesh);
+		readMesh: function (obj, mesh) {
+			var i, p;
+			var faces=mesh.faces, points=mesh.points;
+			var g = new THREE.Geometry();
+			var mesh = new THREE.Mesh(g, new THREE.MeshNormalMaterial());
+			
+			i = 0;
+			
+			while (i in points) {
+				p = points[i];
+				g.vertices.push(new THREE.Vector3(p[0], p[1], p[2]));
+				i++;
+			}
+			
+			i = 0;
+			
+			while (i in faces) {
+				this.readMeshFace(g, {
+					sides: faces[i+0],
+					flags: faces[i+1],
+					material: faces[i+2],
+					normal: faces[i+3],
+					points: faces[i+4]
+				});
+				
+				i += 5;
+			}
+			
+			g.computeFaceNormals();
+			mesh.frustumCulled  = false;
+			obj.entity.add(mesh);
+		},
+		
+		readMeshFace: function (g, face) {
+			var points = face.points;
+			
+			g.faces.push(new THREE.Face3(
+				points[2][0],
+				points[1][0],
+				points[0][0]
+			));
 		}
 	});
 	

@@ -27,8 +27,10 @@ define(['Mode', 'Formats/An8'], function (Mode, An8) {
 		},
 		
 		importObjectData: function (e) {
+			var mode = this;
 			var data = this.objectReader.result;
 			var format;
+			var loaded;
 			
 			if (e.loaded <= 0 || data === null || data.length <= 0) {
 				return;
@@ -37,6 +39,11 @@ define(['Mode', 'Formats/An8'], function (Mode, An8) {
 			format = new An8(editor);
 			
 			format.read(data);
+			
+			$.each(format.objects, function (index, obj) {
+				console.log(obj);
+				mode.scene.add(obj.entity);
+			});
 		}
 	});
 	

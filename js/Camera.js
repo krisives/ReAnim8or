@@ -28,9 +28,9 @@ define(function () {
 			opacity: 1,
 		});
 		
-		line(g, 1, 0, 0);
-		line(g, 0, 1, 0);
-		line(g, 0, 0, 1);
+		line(g, 10, 0, 0);
+		line(g, 0, 10, 0);
+		line(g, 0, 0, 10);
 		
 		this.entity = new THREE.Line(
 			this.geometry,
@@ -49,8 +49,8 @@ define(function () {
 		if (!view) { throw "Must pass a view"; }
 		this.view = view;
 		
-		this.distance = 25.0;
-		this.maxDistance = 50.0;
+		this.distance = 100.0;
+		this.maxDistance = 1000.0;
 		this.yaw = 0.0;
 		this.pitch = 0.0;
 		this.roll = 0.0;
@@ -61,8 +61,8 @@ define(function () {
 		this.entity =  new THREE.PerspectiveCamera(
 			45,
 			this.view.width / this.view.height,
-			0.1,
-			10000
+			1,
+			1000
 		);
 		
 		this.entity.useQuaternion = true;
