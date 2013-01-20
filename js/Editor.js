@@ -94,6 +94,10 @@ function (Mouse, Menu, Toolbar, Project, Dialog, PopupMenu) {
 	
 	Editor.prototype = {
 		action: function (action, args) {
+			if (typeof action === 'undefined' || action === null || action == '') {
+				return;
+			}
+			
 			var f;
 			
 			if (typeof args === 'string') {

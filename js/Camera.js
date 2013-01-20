@@ -91,7 +91,7 @@ define(function () {
 		move: function (x, y, z) {
 			var v = new THREE.Vector3(x, y, z);
 			this.entity.quaternion.multiplyVector3(v);
-			this.rig.position.addSelf(v);
+			this.rig.position.add(v);
 		},
 		
 		translate: function (x, y, z) {
