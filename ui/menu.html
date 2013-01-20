@@ -1,0 +1,152 @@
+
+<div class="submenu">
+	<span>File</span>
+	
+	<div class="more">
+		<a class="menu-file-new" data-open="#open">
+			<i class="icon-asterisk"></i>
+			New
+		</a>
+		<div class="separator"></div>
+		<label class="menu-file-open" data-action="openFile" data-args="#project-open-input">
+			<i class="icon-file"></i>
+			Open
+		</label>
+		<div class="separator"></div>
+		<a><i class="icon-save"></i> Save</a>
+		<a><i class="icon-save"></i> Save As...</a>
+		<div class="separator"></div>
+		<a data-action="quit"><i class="icon-off"></i> Quit</a>
+	</div>
+</div>
+
+<div class="submenu">
+	<span>Edit</span>
+	
+	<div class="more">
+		<a class="disabled"><i class="icon-copy"></i> Copy</a>
+		<a class="disabled"><i class="icon-paste"></i> Paste</a>
+		<div class="separator"></div>
+		<a class="disabled"><i class="icon-cut"></i> Cut</a>
+	</div>
+</div>
+
+<div class="submenu">
+	<span>Mode</span>
+	
+	<div class="more">
+		<a id="menu-mode-object" data-action="changeMode" data-args="object">
+			<i class="icon-check"></i>
+			Object
+		</a>
+		
+		<a id="menu-mode-figure" data-action="changeMode" data-args="figure">
+			<i class="icon-check-empty"></i>
+			Figure
+		</a>
+		
+		<a id="menu-mode-sequence" data-action="changeMode" data-args="sequence">
+			<i class="icon-check-empty"></i>
+			Sequence
+		</a>
+	</div>
+</div>
+
+<div class="submenu mode-object">
+	<span>Object</span>
+	
+	<div class="more">
+		<a><i class="icon-star"></i> New</a>
+		<div class="separator"></div>
+		<label data-action="openFile" data-args="#object-import-input">
+			<i class="icon-upload"></i>
+			Import
+		</label>
+		<a><i class="icon-download"></i> Export</a>
+		<div class="separator"></div>
+		<a><i class="icon-check"></i> Some Object</a>
+	</div>
+</div>
+
+<div class="submenu">
+	<span>View</span>
+	
+	<div class="more">
+		<a data-action="viewReset"><i class="icon-refresh"></i> Reset</a>
+		<div class="separator"></div>
+		
+		<div class="group menu-view-shading">
+		<a class="menu-view-wire" data-action="changeShading" data-args="wire">
+			<i class="icon-check"></i>
+			Wire
+		</a>
+		<a class="menu-view-flat" data-action="changeShading" data-args="flat">
+			<i class="icon-check-empty"></i>
+			Flat
+		</a>
+		<a class="menu-view-smooth" data-action="changeShading" data-args="smooth">
+			<i class="icon-check-empty"></i>
+			Smooth
+		</a>
+		</div>
+		
+		<div class="separator"></div>
+		<a><i class="icon-check"></i> Grid</a>
+	</div>
+</div>
+
+<div class="submenu mode-object">
+	<span>Build</span>
+	
+	<div class="more">
+		<a><i class="icon-link"></i> Group</a>
+		<a><i class="icon-resize-full"></i> Ungroup</a>
+		<div class="separator"></div>
+		<a><i class=""></i> Convert to Mesh</a>
+		<a><i class=""></i> Join Solids</a>
+	</div>
+</div>
+
+<div class="submenu">
+	<span>Project</span>
+	
+	<div class="more">
+		<a href="#">
+			<i class="icon-edit"></i>
+			Edit Info
+		</a>
+		<div class="separator"></div>
+		<a href="#">
+			<i class="icon-check"></i>
+			Project Name
+		</a>
+	</div>
+</div>
+
+<div class="submenu pull-right">
+	<span>About</span>
+	
+	<div class="more">
+		<a href="https://github.com/krisives/ReAnim8or" target="_blank">
+			<i class="icon-github"></i> 
+			GitHub
+		</a>
+		
+		<a href="https://github.com/krisives/ReAnim8or/wiki" target="_blank">
+			<i class="icon-book"></i> 
+			Wiki
+		</a>
+		
+		<a href="https://github.com/krisives/ReAnim8or/issues/new" target="_blank">
+			<i class="icon-flag"></i> 
+			Report Bug
+		</a>
+		
+		<div class="separator"></div>
+		<a data-action="about">
+			<i class="icon-question-sign"></i> 
+			About
+		</a>
+	</div>
+</div>
+

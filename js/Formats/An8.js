@@ -360,11 +360,28 @@ define(['Format'], function (Format) {
 		readMeshFace: function (g, face) {
 			var points = face.points;
 			
-			g.faces.push(new THREE.Face3(
-				points[2][0],
-				points[1][0],
-				points[0][0]
-			));
+			if (face.sides == 3) {
+				g.faces.push(new THREE.Face3(
+					points[2][0],
+					points[1][0],
+					points[0][0]
+				));
+				
+				return;
+			}
+			
+			if (face.sides == 4) {
+				g.faces.push(new THREE.Face4(
+					points[3][0],
+					points[2][0],
+					points[1][0],
+					points[0][0]
+				));
+				
+				return;
+			}
+			
+			console.log("Cannot handle ", face.sides, " sided faces yet!");
 		}
 	});
 	

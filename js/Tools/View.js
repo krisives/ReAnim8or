@@ -25,6 +25,10 @@ define(['Tool', 'Mouse', 'Keyboard'], function (Tool, Mouse, Keyboard) {
 			toolbar.toggleTool(tool);
 		});
 		
+		Keyboard.on.down('esc', this.createHandler(function () {
+			toolbar.changeTool(null);
+		}));
+		
 		Mouse.on.down(this.createHandler(function (e) {
 			switch (e.button) {
 			case 0:

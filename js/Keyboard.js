@@ -17,6 +17,8 @@ define(function () {
 			key = key.trim().toUpperCase();
 			if (key === 'CTRL') { ctrl = true; return; }
 			if (key === 'SHIFT') { shift = true; return; }
+			if (key === 'ESC') { keys.push(27); return; }
+			
 			keys.push(key.charCodeAt(0));
 		});
 		

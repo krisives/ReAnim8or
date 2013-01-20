@@ -9,6 +9,12 @@ requirejs.config({
 	urlArgs: String("v=" + ReAnim8or.VERSION)
 });
 
+$(function () {
+	$.each(['menu', 'topbar', 'leftbar', 'dialogs'], function (index, key) {
+		$('#' + key).load("ui/" + key + ".html");
+	});
+});
+
 requirejs(['Dialog', 'Editor', 'Mouse'], function (Dialog, Editor, Mouse) {
 	$(function () {
 		$('.tip').tooltip({container: '#ui'});

@@ -412,17 +412,31 @@ function (Mouse, Menu, Toolbar, Project, Dialog, PopupMenu) {
 			src.click(handler);
 		},
 		
-		pick: function (v) {
-			if (!this.mode) { return; }
-			var camera = this.mode.camera;
+		projectScreen: function (x, y, normalized) {
+			if (!normalized) {
+				x = x / this.width;
+				y = y / this.height;
+			}
 			
 			this.projectVector.set(
-				Mouse.nx*2 - 1,
-				-Mouse.ny*2 + 1,
+				x*2 - 1,
+				-y*2 + 1,
 				0.5
 			);
 			
 			this.projector.unprojectVector(this.projectVector, this.mode.camera.entity);
+			return projectVector;
+		},
+		
+		pick: function (v) {
+			if (!this.mode) { return; }
+			var camera = this.mode.camera;
+			
+			this.projectScreen(
+				Mouse.nx,
+				Mouse.ny,
+				false
+			);
 			
 			this.raycaster.set(camera.rig.position, vector.subSelf( camera.position ).normalize() );
 		},
